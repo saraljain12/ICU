@@ -228,32 +228,23 @@ class _OtpScreenState extends State<OtpScreen> {
         smsCode: smsOTP,
       );
       final UserCredential user = await _auth.signInWithCredential(credential);
+      String number = FirebaseAuth.instance.currentUser.phoneNumber;
+      Fluttertoast.showToast(msg: number.toString());
+      //data
+      Map<String,Object> demodata = {
+        "number":number
+      };
+
+
       //final User currentUser = await _auth.currentUser;
       if (user.additionalUserInfo.isNewUser) {
-        if (user != null)
-        {
-          adddata();
-          //Ex: Go to RegisterPage()
-          Navigator.pushAndRemoveUntil<dynamic>(
-            context,
-            MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => RegisterScreen(),
-            ),
-                (route) => false,//if you want to disable back feature set to false
-          );
+        if (user != null) {
+          await Navigator.pushReplacementNamed(context, '/FormPage',
+              arguments: demodata);
         }
 
       }
-      else {
-        Navigator.pushAndRemoveUntil<dynamic>(
-          context,
-          MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => HomeScreen(),
-          ),
-              (route) => false,//if you want to disable back feature set to false
-        );
-        //Ex: Go to HomePage()
-      }
+
 
 
       // assert(user.user.uid == currentUser.uid);
@@ -304,14 +295,4 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  //add data
-  void adddata(){
-    String uid = FirebaseAuth.instance.currentUser.uid;
-    Map<String,dynamic> demodata= {
-      "name":"saral",
-      "age" : "jain"
-    };
-    DocumentReference collectionReference = FirebaseFirestore.instance.collection('Users').doc(uid);
-    collectionReference.set(demodata);
-  }
 }

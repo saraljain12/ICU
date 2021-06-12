@@ -6,6 +6,8 @@ import 'package:icu/screens/home_screen/home_screen.dart';
 import 'package:icu/screens/login_screen/login_screen.dart';
 import 'package:icu/screens/otp_screen/otp_screen.dart';
 import 'package:icu/screens/profileinfo/UserInfo.dart';
+import 'package:icu/screens/register.dart';
+import 'package:icu/screens/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
         '/otpScreen': (BuildContext ctx) => OtpScreen(),
         '/homeScreen': (BuildContext ctx) => HomeScreen(),
+        '/FormPage': (BuildContext ctx) => FormPage(),
+        '/RegisterScreen':(BuildContext ctx) => RegisterScreen(),
     });
   }
 }

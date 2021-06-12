@@ -330,32 +330,26 @@ class _LoginScreenState extends State<LoginScreen> {
       final UserCredential authResult =
         await _auth.signInWithCredential(credential);
       final User user = authResult.user;
+      String email = FirebaseAuth.instance.currentUser.email;
+      Map<String,Object> demodata = {
+        "email":email
+      };
 
       ///Her to check isNewUser OR Not
       if (authResult.additionalUserInfo.isNewUser) {
-        String email = FirebaseAuth.instance.currentUser.email;
         if (user != null) {
-          adddata(email);
-          Fluttertoast.showToast(msg: email);
-          Navigator.pushAndRemoveUntil<dynamic>(
-            context,
-            MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => FormPage(),
-            ),
-                (route) => false,
-          );
+          await Navigator.pushReplacementNamed(context, '/FormPage',
+              arguments: demodata);
         }
 
-      } else {
-        Navigator.pushAndRemoveUntil<dynamic>(
-          context,
-          MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => HomeScreen(),
-          ),
-              (route) => false,//if you want to disable back feature set to false
-        );
       }
-      // Once signed in, return the UserCredential
+      else {
+        if (user != null) {
+          await Navigator.pushReplacementNamed(context, '/FormPage',
+              arguments: demodata);
+        }
+       // await Navigator.pushNamed(context, '/RegisterScreen',);
+      }
       CircularProgressIndicator(color: Colors.black,);
 
 
@@ -366,12 +360,4 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void adddata(String email){
-    String uid = FirebaseAuth.instance.currentUser.uid;
-    Map<String,dynamic> demodata= {
-      "email" : email
-    };
-    DocumentReference collectionReference = FirebaseFirestore.instance.collection('Users').doc(uid);
-    collectionReference.set(demodata);
-  }
 }

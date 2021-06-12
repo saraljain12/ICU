@@ -37,6 +37,7 @@ dependencies:
   sms_otp_auto_verify: ^1.2.2
   email_validator: '^1.0.0'
   gender_selection: "^0.0.8"
+  csc_picker: ^0.2.5
 
 dev_dependencies:
   flutter_test:
