@@ -148,10 +148,10 @@ class _OtpScreenState extends State<OtpScreen> {
                             PinFieldAutoFill(
                               codeLength: 6,
                               onCodeChanged:(code){
-                                
+                                smsOTP = code;
                               },
                               onCodeSubmitted: (code){
-                                code = smsOTP;
+                                smsOTP = code;
                                 verifyOtp();
                               },
                             ),
@@ -237,13 +237,13 @@ class _OtpScreenState extends State<OtpScreen> {
 
 
       //final User currentUser = await _auth.currentUser;
-      if (user.additionalUserInfo.isNewUser) {
+      // if (user.additionalUserInfo.isNewUser) {
         if (user != null) {
           await Navigator.pushReplacementNamed(context, '/FormPage',
               arguments: demodata);
         }
 
-      }
+      // }
 
 
 
