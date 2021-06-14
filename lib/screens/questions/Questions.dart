@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:icu/screens/register.dart';
+import 'package:icu/screens/home_screen/home_screen.dart';
 
 import './quiz.dart';
 
@@ -81,9 +81,8 @@ class _MyQuestionsState extends State<Questions> {
    String uid = FirebaseAuth.instance.currentUser.uid;
    demodata.addAll({_questions[_questionIndex-1].values.elementAt(0):text.toString()});
    CollectionReference collectionReference = FirebaseFirestore.instance.collection('Users').doc(uid).collection('Questions');
-   collectionReference.doc().set(demodata);
+   collectionReference.doc('Question').set(demodata);
 
-    //print();
     if (_questionIndex < _questions.length) {
       print('We have more questions!');
     } else {
@@ -106,7 +105,7 @@ class _MyQuestionsState extends State<Questions> {
             questionIndex: _questionIndex,
             questions: _questions,
           ) //Quiz
-              : RegisterScreen()
+              : HomeScreen()
         ), //Padding
       ), //Scaffold
       debugShowCheckedModeBanner: false,

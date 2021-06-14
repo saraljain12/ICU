@@ -43,8 +43,8 @@ class _FormPageState extends State<FormPage> {
         "state":stateValue,
         "city":cityValue
       };
-
       FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor").set(demodata);
+      Navigator.pushReplacementNamed(context, '/QuestionScreen');
     }
     }
 
@@ -106,7 +106,7 @@ class _FormPageState extends State<FormPage> {
     final  Map<String, Object> data = ModalRoute.of(context).settings.arguments;
     String number = "${data['number']}";
     number = number.substring(3);
-    // Fluttertoast.showToast(msg: number);
+  // Fluttertoast.showToast(msg: number);
     mail = "${data['email']}";
     // Fluttertoast.showToast(msg: mail);
     if(mail!="null"){
@@ -115,7 +115,6 @@ class _FormPageState extends State<FormPage> {
     else{
       ismail = false;
     }
-    // Fluttertoast.showToast(msg: ismail.toString());
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -505,7 +504,6 @@ class _FormPageState extends State<FormPage> {
                         side: BorderSide(color: Colors.grey,width: 2)
                     ),
                     textColor:Colors.white,
-
                   ),
                 ),
               ],

@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:icu/screens/home_screen/home_screen.dart';
 import 'package:icu/screens/login_screen/login_screen.dart';
-import 'package:icu/screens/register.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -17,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 class SplashState extends State<SplashScreen> {
   @override
   void initState() {
-
     super.initState();
     startTime();
   }
@@ -34,15 +33,12 @@ class SplashState extends State<SplashScreen> {
   route() {
     User user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // CircularProgressIndicator();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RegisterScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
     else {
-      //Fluttertoast.showToast(msg: "Welcome");
-      // CircularProgressIndicator();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),

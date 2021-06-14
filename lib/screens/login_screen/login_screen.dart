@@ -3,14 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:icu/screens/home_screen/home_screen.dart';
 import 'package:icu/screens/login_screen/widget/country_picker.dart';
 import 'package:icu/screens/login_screen/widget/custom_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:icu/screens/profileinfo/UserInfo.dart';
-import 'package:icu/screens/register.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -121,12 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Colors.transparent,
                               borderRadius: BorderRadius.all(Radius.circular(30))
                           ),
                           child: Image.asset(
-                            'assets/images/Logo.png',
-                            height: screenHeight * 0.2,
+                            'assets/images/Logo.jpeg',
+                            height: screenHeight * 0.3,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -345,10 +341,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       else {
         if (user != null) {
-          await Navigator.pushReplacementNamed(context, '/FormPage',
-              arguments: demodata);
+          await Navigator.pushReplacementNamed(context, '/homeScreen');
         }
-       // await Navigator.pushNamed(context, '/RegisterScreen',);
       }
       CircularProgressIndicator(color: Colors.black,);
 

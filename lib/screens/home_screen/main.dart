@@ -1,12 +1,10 @@
 // @dart=2.9
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icu/screens/home_screen/home_screen.dart';
-import 'package:icu/screens/login_screen/login_screen.dart';
-import 'package:icu/screens/otp_screen/otp_screen.dart';
+import '../login_screen/otp_screen.dart';
 import 'package:icu/screens/profileinfo/UserInfo.dart';
-import 'package:icu/screens/register.dart';
+import 'package:icu/screens/questions/Questions.dart';
 import 'package:icu/screens/splash_screen/splash_screen.dart';
 
 void main() async {
@@ -27,41 +25,12 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Gotham',
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginScreen(),
+        home: SplashScreen(),
         routes: <String, WidgetBuilder>{
         '/otpScreen': (BuildContext ctx) => OtpScreen(),
         '/homeScreen': (BuildContext ctx) => HomeScreen(),
         '/FormPage': (BuildContext ctx) => FormPage(),
-        '/RegisterScreen':(BuildContext ctx) => RegisterScreen(),
+        '/QuestionScreen':(BuildContext ctx)=> Questions()
     });
-  }
-}
-
-class InitializerWidget extends StatefulWidget {
-  @override
-  _InitializerWidgetState createState() => _InitializerWidgetState();
-}
-
-class _InitializerWidgetState extends State<InitializerWidget> {
-
-  FirebaseAuth _auth;
-  User _user;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _auth = FirebaseAuth.instance;
-    User _user = _auth.currentUser;
-    isLoading = false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return isLoading ? Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    ) : _user == null ? LoginScreen() : HomeScreen();
   }
 }

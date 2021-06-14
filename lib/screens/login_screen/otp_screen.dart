@@ -1,18 +1,12 @@
 //@dart=2.9
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:icu/screens/home_screen/home_screen.dart';
-
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
-
-import '../register.dart';
 
 // ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
@@ -229,7 +223,6 @@ class _OtpScreenState extends State<OtpScreen> {
       );
       final UserCredential user = await _auth.signInWithCredential(credential);
       String number = FirebaseAuth.instance.currentUser.phoneNumber;
-      Fluttertoast.showToast(msg: number.toString());
       //data
       Map<String,Object> demodata = {
         "number":number
@@ -237,15 +230,16 @@ class _OtpScreenState extends State<OtpScreen> {
 
 
       //final User currentUser = await _auth.currentUser;
-      // if (user.additionalUserInfo.isNewUser) {
+       if (user.additionalUserInfo.isNewUser) {
         if (user != null) {
           await Navigator.pushReplacementNamed(context, '/FormPage',
               arguments: demodata);
         }
-
-      // }
-
-
+      }else {
+         if (user != null) {
+           Navigator.pushReplacementNamed(context, '/homeScreen');
+         }
+       }
 
       // assert(user.user.uid == currentUser.uid);
       // Navigator.pushReplacementNamed(context, '/homeScreen');
