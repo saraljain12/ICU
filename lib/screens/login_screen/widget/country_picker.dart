@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CountryPicker extends StatefulWidget {
-  CountryPicker({@required this.callBackFunction, this.headerText, this.headerBackgroundColor, this.headerTextColor});
+  CountryPicker({@required this.callBackFunction, this.headerText, this.headerBackgroundColor, this.headerTextColor,this.SelectedTextColor,this.showflag});
 
   final Function callBackFunction;
   final String headerText;
   final Color headerBackgroundColor;
   final Color headerTextColor;
+  final Color SelectedTextColor;
+  bool showflag = false;
   bool isInit = true;
 
   @override
@@ -22,8 +24,6 @@ class _CountryPickerState extends State<CountryPicker> {
   CountryModel selectedCountryData;
 
   @override
-  //method calls when state change
-  // ignore: avoid_void_async
   void didChangeDependencies() async {
     if (widget.isInit) {
       widget.isInit = false;
@@ -55,19 +55,26 @@ class _CountryPickerState extends State<CountryPicker> {
           showDialogue(context);
         },
         child: Container(
-          child: Wrap(
+          child: widget.showflag?Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
+
               Text(
                 selectedCountryData != null ? selectedCountryData.flag : '',
                 style: const TextStyle(fontSize: 20,fontFamily: 'Poppins',color: Colors.white),
               ),
               Text(
                 selectedCountryData != null ? selectedCountryData.dialCode : '',
-                style: const TextStyle(fontSize: 16,fontFamily: 'Poppins',color: Colors.black),
+                style:  TextStyle(fontSize: 16,fontFamily: 'Poppins',color: widget.SelectedTextColor),
               )
             ],
-          ),
+          ):Wrap(crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                selectedCountryData != null ? selectedCountryData.dialCode : '',
+                style:  TextStyle(fontSize: 16,fontFamily: 'Poppins',color: widget.SelectedTextColor),
+              )
+            ],),
         ),
       ),
     );

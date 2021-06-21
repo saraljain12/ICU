@@ -18,7 +18,7 @@ class Questions extends StatefulWidget {
 class _MyQuestionsState extends State<Questions> {
   final _questions = const [
     {
-      'questionText': 'Q1. Who created Flutter?',
+      'questionText': ' Who created Flutter?',
       'answers': [
         {'text': 'Facebook', 'score': -2},
         {'text': 'Adobe', 'score': -2},
@@ -27,7 +27,7 @@ class _MyQuestionsState extends State<Questions> {
       ],
     },
     {
-      'questionText': 'Q2. What is Flutter?',
+      'questionText': ' What is Flutter?',
       'answers': [
         {'text': 'Android Development Kit', 'score': -2},
         {'text': 'IOS Development Kit', 'score': -2},
@@ -40,7 +40,7 @@ class _MyQuestionsState extends State<Questions> {
       ],
     },
     {
-      'questionText': ' Q3. Which programing language is used by Flutter',
+      'questionText': '  Which programing language is used by Flutter',
       'answers': [
         {'text': 'Ruby', 'score': -2},
         {'text': 'Dart', 'score': 10},
@@ -49,7 +49,7 @@ class _MyQuestionsState extends State<Questions> {
       ],
     },
     {
-      'questionText': 'Q4. Who created Dart programing language?',
+      'questionText': ' Who created Dart programing language?',
       'answers': [
         {'text': 'Lars Bak and Kasper Lund', 'score': 10},
         {'text': 'Brendan Eich', 'score': -2},
@@ -59,7 +59,7 @@ class _MyQuestionsState extends State<Questions> {
     },
     {
       'questionText':
-      'Q5. Is Flutter for Web and Desktop available in stable version?',
+      ' Is Flutter for Web and Desktop available in stable version?',
       'answers': [
         {
           'text': 'Yes',
@@ -89,25 +89,21 @@ class _MyQuestionsState extends State<Questions> {
       print('No more questions!');
     }
   }
-  void adddata(){
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: _questionIndex < _questions.length
-              ? Quiz(
-            answerQuestion: _answerQuestion,
-            questionIndex: _questionIndex,
-            questions: _questions,
-          ) //Quiz
-              : HomeScreen()
-        ), //Padding
-      ), //Scaffold
+        body:  Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: _questionIndex < _questions.length
+                ? Quiz(
+              answerQuestion: _answerQuestion,
+              questionIndex: _questionIndex,
+              questions: _questions,
+            ) //Quiz
+                : HomeScreen()
+          ),
+        ), //Padding //Scaffold
       debugShowCheckedModeBanner: false,
     ); //MaterialApp
   }

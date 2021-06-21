@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  geolocator: ^7.1.0
+  geocoder: ^0.2.1
   cupertino_icons: ^1.0.2
   pin_entry_text_field: ^0.1.4
   firebase_auth: ^1.3.0
@@ -38,6 +39,8 @@ dependencies:
   email_validator: '^1.0.0'
   csc_picker: ^0.2.5
   gender_picker: ^1.1.0
+  image_picker: ^0.7.1
+  firebase_storage: ^8.0.3
 
 dev_dependencies:
   flutter_test:
@@ -85,7 +88,19 @@ flutter:
      - family: Poppins
        fonts:
          - asset: assets/fonts/Poppins-Medium.ttf
-  #         weight: 700
+     - family: Kaushan
+       fonts:
+           - asset: assets/fonts/KaushanScript-Regular.ttf
+     - family: Sanchez
+       fonts:
+           - asset: assets/fonts/Sanchez-Regular.ttf
+     - family: Rubik
+       fonts:
+           - asset: assets/fonts/Rubik-Regular.ttf
+             weight: 600
+           - asset: assets/fonts/Rubik-Light.ttf
+             weight: 400
+#         weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

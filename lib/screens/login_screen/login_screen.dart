@@ -115,14 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.all(Radius.circular(30))
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(5))
                           ),
                           child: Image.asset(
-                            'assets/images/Logo.jpeg',
-                            height: screenHeight * 0.3,
+                            'assets/images/Transparent Logo.png',
+                            height: screenHeight * 0.12,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -201,12 +201,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CountryPicker(
+                                      showflag: true,
                                       callBackFunction: _callBackFunction,
                                       headerText: 'Select Country',
                                       headerBackgroundColor: Theme
                                           .of(context)
                                           .primaryColor,
                                       headerTextColor: Colors.white,
+                                      SelectedTextColor: Colors.white,
                                     ),
                                     SizedBox(
                                       width: screenWidth * 0.02,
@@ -331,17 +333,17 @@ class _LoginScreenState extends State<LoginScreen> {
         "email":email
       };
 
-      ///Her to check isNewUser OR Not
+      ///Here to check isNewUser OR Not
       if (authResult.additionalUserInfo.isNewUser) {
         if (user != null) {
           await Navigator.pushReplacementNamed(context, '/FormPage',
               arguments: demodata);
         }
-
       }
       else {
         if (user != null) {
-          await Navigator.pushReplacementNamed(context, '/homeScreen');
+          await Navigator.pushReplacementNamed(context, '/FormPage',
+              arguments: demodata);
         }
       }
       CircularProgressIndicator(color: Colors.black,);

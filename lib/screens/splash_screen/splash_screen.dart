@@ -45,85 +45,6 @@ class SplashState extends State<SplashScreen> {
       );
     }
   }
-  Widget Title = new Container(
-    padding: EdgeInsets.symmetric(horizontal: 20,),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Splash",
-          style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 60
-          ),
-        ),
-        Text(
-          "Screen",
-          style: TextStyle(
-              color: Colors.yellow,
-              fontWeight: FontWeight.bold,
-              fontSize: 60
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.circle,
-              color: Colors.black87,
-              size: 15.0,
-            ),
-            new SizedBox(
-              width: 70.0,
-              child: new Center(
-                child: new Container(
-                  margin: new EdgeInsetsDirectional.only(
-                      start: 10.0, end: 10.0),
-                  height: 2.0,
-                  color: Colors.yellow,
-                ),
-              ),
-            ),
-
-            Icon(
-              Icons.circle,
-              color: Colors.black,
-              size: 15.0,
-            )
-          ],
-        ),
-        SizedBox(height: 5,),
-        CircularProgressIndicator(color: Colors.black,)
-      ],
-    ),
-  );
-  Widget text(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            "Welcome to",
-            style: TextStyle(
-                color: Colors.white60,
-                fontSize: 25
-            ),
-          ),
-          Text(
-            "Grocery App",
-            style: TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.bold,
-                fontSize: 25
-            ),
-          ),
-        ],
-      ),
-    );
-  }
   @override
   initScreen(BuildContext context) {
     const color3 = const Color(0xFF38BF68);
@@ -131,18 +52,59 @@ class SplashState extends State<SplashScreen> {
 
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Balsamiq_Sans'),
+
         home: Scaffold(
-            body: Container(
-              child: ListView(
-                  children: [
-                    Center(child: Title),
+            body: Stack(
+                  children: <Widget>[
                     Container(
-                      height: 130,
-                    ),
-                    text(context)
-                  ]),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                      image: new ExactAssetImage('assets/images/Vr.png'),
+                       fit: BoxFit.cover,
+                              ),
+                      ),
+                      child: new BackdropFilter(
+                        filter: new ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+                        child: new Container(
+                          decoration: new BoxDecoration(color: Color(0xffd8334a).withOpacity(0.0)),
+                        ),
+                       ),
+                      ),
+                    Container(
+                      child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                  height: 100,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffd8334a),
+                                        shape: BoxShape.circle
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        shape: BoxShape.circle
+                                    ),
+                                    child: Image.asset("assets/images/Logo.png",scale: 8,),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                              Text("i choose you",style: TextStyle(fontFamily: 'Kaushan',color: Colors.white,fontSize: 30),),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                              Text("Let's choose your favourite",style: TextStyle(fontFamily: 'Sanchez',color: Colors.white,fontSize: 18),)
+                          ]),
             )
-        )
+        ])
+    )
     );
   }
 }

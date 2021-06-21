@@ -9,14 +9,22 @@ class Answer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: RaisedButton(
-        color: Color(0xFF00E676),
-        textColor: Colors.white,
-        child: Text(answerText),
-        onPressed: selectHandler,
-      ), //RaisedButton
+    return Center(
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(70.0)),
+          color: Colors.blue,
+          border: Border.all(
+            color: Colors.blue
+          )
+        ),
+        child: TextButton(
+          child: Text(answerText,style: TextStyle(color: Colors.white,fontSize: 16),),
+          onPressed: selectHandler,
+        ), //RaisedButton
+      ),
     ); //Container
   }
 }
