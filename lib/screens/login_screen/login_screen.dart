@@ -342,13 +342,9 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       else {
         if (user != null) {
-          await Navigator.pushReplacementNamed(context, '/FormPage',
-              arguments: demodata);
+          await Navigator.pushReplacementNamed(context, '/homeScreen');
         }
       }
-      CircularProgressIndicator(color: Colors.black,);
-
-
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
     catch(e){

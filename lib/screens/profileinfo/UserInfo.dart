@@ -46,6 +46,9 @@ class _FormPageState extends State<FormPage> {
                   "age": age,
                   "gender": gender,
                   "number": phone,
+                  "city":city,
+                  "state":state,
+                  "Address":address
                 };
                 FirebaseFirestore.instance.collection("Users").doc(
                     FirebaseAuth.instance.currentUser.uid).collection(
@@ -70,6 +73,9 @@ class _FormPageState extends State<FormPage> {
                 "age": age,
                 "gender": gender,
                 "number": phone,
+                "city":city,
+                "state":state,
+                "Address":address
               };
               FirebaseFirestore.instance.collection("Users").doc(
                   FirebaseAuth.instance.currentUser.uid)
@@ -139,6 +145,7 @@ class _FormPageState extends State<FormPage> {
     number = number.substring(3);
     String email = "${data['email']}";
     if(email!="null"){
+      mail = email;
       ismail = true;
     }
     else{

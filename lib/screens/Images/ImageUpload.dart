@@ -1,5 +1,6 @@
 //@dart=2.9
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,7 @@ class _ImageScreenState extends State<ImageScreen> {
   File _image1,_image2,_image3,_image4,_image5,_image6;
   final _picker = ImagePicker();
   PickedFile image;
-  TextEditingController _DescriptionController;
+  TextEditingController _DescriptionController = TextEditingController();
 
   _imgFromCamera1() async {
      image = await _picker.getImage(
@@ -126,47 +127,46 @@ class _ImageScreenState extends State<ImageScreen> {
     String uid = firebaseauth.currentUser.uid;
 
    if(_image1!=null&&_image2!=null){
-
-     if(_image3==null){
+     await _fireStorage.ref().child('Images/$uid/image1').putFile(_image1);
+     await _fireStorage.ref().child('Images/$uid/image2').putFile(_image2);
+     if(_image3!=null){
        try {
-         await _fireStorage.ref().child(uid+'Images/image1').putFile(_image1);
-         await _fireStorage.ref().child(uid+'Images/image2').putFile(_image2);
+         await _fireStorage.ref().child('Images/$uid/image3').putFile(_image3);
        }
        catch(Exception){
          Fluttertoast.showToast(msg: Exception.toString());
        }
      }
-     else if(_image4==null){
+     if(_image4!=null){
        try{
-       await _fireStorage.ref().child('Images/image3').putFile(_image3);
+         await _fireStorage.ref().child('Images/$uid/image4').putFile(_image4);
          }
         catch(Exception){
         Fluttertoast.showToast(msg: Exception.toString());
         }
      }
-     else if(_image5==null){
+     if(_image5!=null){
        try{
-       await _fireStorage.ref().child('Images/image4').putFile(_image4);
+         await _fireStorage.ref().child('Images/$uid/image5').putFile(_image5);
          }
         catch(Exception){
         Fluttertoast.showToast(msg: Exception.toString());
         }
      }
-     else if(_image6==null){
+     if(_image6!=null){
        try{
-       await _fireStorage.ref().child('Images/image5').putFile(_image5);
+         await _fireStorage.ref().child('Images/$uid/image6').putFile(_image6);
        }
        catch(Exception){
          Fluttertoast.showToast(msg: Exception.toString());
        }
      }
-     else{
-       try{
-       await _fireStorage.ref().child('Images/image6').putFile(_image6);
-       }
-       catch(Exception){
-         Fluttertoast.showToast(msg: Exception.toString());
-       }
+     if(_DescriptionController.text.toString()!="null"){
+       await FirebaseFirestore.instance.collection("Users").doc(
+           FirebaseAuth.instance.currentUser.uid)
+           .collection("Information")
+           .doc("infor")
+           .update({"Description":_DescriptionController.text});
      }
      Navigator.pushReplacementNamed(context, '/QuestionScreen');
    }

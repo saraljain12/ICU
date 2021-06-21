@@ -347,13 +347,11 @@ class _OtpScreenState extends State<OtpScreen> {
         }
       }else {
          if (user != null) {
-           await Navigator.pushReplacementNamed(context, '/FormPage',
-               arguments: demodata);
+           Navigator.pushReplacementNamed(context, '/homeScreen');
          }
        }
-
       // assert(user.user.uid == currentUser.uid);
-      // Navigator.pushReplacementNamed(context, '/homeScreen');
+
     } catch (e) {
       setState(() {
         progress = false;
