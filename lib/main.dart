@@ -2,7 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:icu/screens/ChatPackage/FirebaseApi.dart';
 import 'package:icu/screens/Images/ImageUpload.dart';
+import 'package:icu/screens/home_screen/Home.dart';
 import 'package:icu/screens/home_screen/home_screen.dart';
 import 'package:icu/screens/login_screen/login_screen.dart';
 import 'screens/login_screen/otp_screen.dart';
@@ -28,14 +30,15 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Gotham',
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginScreen(),
+        home: SplashScreen(),
         routes: <String, WidgetBuilder>{
           '/DetailsScreen':(BuildContext ctx) => FormPage(),
         '/otpScreen': (BuildContext ctx) => OtpScreen(),
         '/homeScreen': (BuildContext ctx) => HomeScreen(),
         '/FormPage': (BuildContext ctx) => FormPage(),
         '/QuestionScreen':(BuildContext ctx)=> Questions(),
-          '/ImageScreen':(BuildContext ctx)=>ImageScreen()
+          '/ImageScreen':(BuildContext ctx)=>ImageScreen(),
+          '/ChatScreen':(BuildContext ctx)=>Chat()
     });
   }
 }

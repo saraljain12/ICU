@@ -127,11 +127,24 @@ class _ImageScreenState extends State<ImageScreen> {
     String uid = firebaseauth.currentUser.uid;
 
    if(_image1!=null&&_image2!=null){
-     await _fireStorage.ref().child('Images/$uid/image1').putFile(_image1);
-     await _fireStorage.ref().child('Images/$uid/image2').putFile(_image2);
+     DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
+         FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
+      // setState(() async {
+        await _fireStorage.ref().child('Images/$uid/image1').putFile(_image1);
+        String url1 = await _fireStorage.ref().child('Images/$uid/image1').getDownloadURL();
+        await docref.update({"image1url" : url1});
+
+        await _fireStorage.ref().child('Images/$uid/image2').putFile(_image2);
+        String url2 = await _fireStorage.ref().child('Images/$uid/image2').getDownloadURL();
+        await docref.update({"image2url" : url2});
+      // });
      if(_image3!=null){
        try {
+         // setState(()async {
          await _fireStorage.ref().child('Images/$uid/image3').putFile(_image3);
+         String url3 =await  _fireStorage.ref().child('Images/$uid/image3').getDownloadURL();
+         await docref.update({"image3url" : url3});
+         // });
        }
        catch(Exception){
          Fluttertoast.showToast(msg: Exception.toString());
@@ -139,7 +152,11 @@ class _ImageScreenState extends State<ImageScreen> {
      }
      if(_image4!=null){
        try{
-         await _fireStorage.ref().child('Images/$uid/image4').putFile(_image4);
+         // setState(() async{
+           await _fireStorage.ref().child('Images/$uid/image4').putFile(_image4);
+           String url4 = await _fireStorage.ref().child('Images/$uid/image4').getDownloadURL();
+           await docref.update({"image4url" : url4});
+         // });
          }
         catch(Exception){
         Fluttertoast.showToast(msg: Exception.toString());
@@ -147,7 +164,11 @@ class _ImageScreenState extends State<ImageScreen> {
      }
      if(_image5!=null){
        try{
-         await _fireStorage.ref().child('Images/$uid/image5').putFile(_image5);
+       //  setState(() async{
+           await _fireStorage.ref().child('Images/$uid/image5').putFile(_image5);
+           String url5 = await _fireStorage.ref().child('Images/$uid/image5').getDownloadURL();
+           await docref.update({"image5url" : url5});
+         // });
          }
         catch(Exception){
         Fluttertoast.showToast(msg: Exception.toString());
@@ -155,19 +176,25 @@ class _ImageScreenState extends State<ImageScreen> {
      }
      if(_image6!=null){
        try{
-         await _fireStorage.ref().child('Images/$uid/image6').putFile(_image6);
+         // setState(() async{
+           await _fireStorage.ref().child('Images/$uid/image6').putFile(_image6);
+           String url6 =await  _fireStorage.ref().child('Images/$uid/image6').getDownloadURL();
+           await docref.update({"image6url" : url6});
+         // });
+
        }
        catch(Exception){
          Fluttertoast.showToast(msg: Exception.toString());
        }
      }
      if(_DescriptionController.text.toString()!="null"){
-       await FirebaseFirestore.instance.collection("Users").doc(
-           FirebaseAuth.instance.currentUser.uid)
-           .collection("Information")
-           .doc("infor")
-           .update({"Description":_DescriptionController.text});
+       await docref.update({"Description":_DescriptionController.text});
      }
+
+
+
+
+
      Navigator.pushReplacementNamed(context, '/QuestionScreen');
    }
    else{

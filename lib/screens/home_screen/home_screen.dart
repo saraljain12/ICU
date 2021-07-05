@@ -1,8 +1,7 @@
 //@dart=2.9
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:icu/screens/login_screen/login_screen.dart';
-import 'package:icu/screens/questions/Questions.dart';
+import '../ChatPackage/ChatScreen.dart';
+import 'package:icu/screens/home_screen/Home.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+  int _currentIndex=0;
 
   @override
   void initState() {
@@ -19,41 +18,62 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return  Scaffold(
       body: Center(
-        child: GestureDetector(
-          onTap: () {
-            _signOut();
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
-          },
-          child: Container(
-            // width: 120,
-            margin: EdgeInsets.symmetric(horizontal: 14),
-            padding: EdgeInsets.only(
-                left: 12, top: 5, bottom: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(
-                    right: Radius.circular(40),
-                    left: Radius.circular(40))
-            ),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  // Container(width: 15),
-                  Icon(Icons.logout,size: 17,),
-                  SizedBox(width: 10),
-                  Text("Logout", style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 17,fontWeight: FontWeight.bold
-                  )),
-                ]),
+        child: (_currentIndex==0)?HomeContent():ChatScreen(),
+      ),
+      bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffd297b), Color(0xffff655b)]),
           ),
-        ),
-      )
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+                backgroundColor: Colors.transparent
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat),
+                label: 'Chat',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Like',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notifications',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _currentIndex,
+            onTap: onTabTapped,
+            showUnselectedLabels: false,
+            backgroundColor: Colors.transparent,
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+            unselectedItemColor: Colors.white54,
+            selectedItemColor: Colors.white,
+            selectedLabelStyle: TextStyle(color: Colors.white),
+          )
+      ),
     );
   }
-
-  Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut();
+  void onTabTapped(int index){
+    setState(() {
+      _currentIndex = index;
+    });
   }
+
 }
