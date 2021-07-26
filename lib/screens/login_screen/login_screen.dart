@@ -1,7 +1,10 @@
 // @dart=2.9
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:icu/screens/login_screen/widget/country_picker.dart';
 import 'package:icu/screens/login_screen/widget/custom_button.dart';
@@ -13,13 +16,17 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin{
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn GoogleSignIN = GoogleSignIn();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _contactEditingController = TextEditingController();
+
+
   var _dialCode = '';
+  bool progress = false;
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //build method for UI Representation
   @override
   Widget build(BuildContext context) {
+    GifController controller= GifController(vsync: this);
     final screenHeight = MediaQuery
         .of(context)
         .size
@@ -269,8 +277,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         GestureDetector(
                           onTap:(){
-                            signInWithGoogle();
-
+                            setState(() {
+                              progress = true;
+                            });
+                            Timer(Duration(seconds: 0),(){ signInWithGoogle();});
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -304,8 +314,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-            )
-          ]
+            ),
+            progress? Center(child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white
+              ),
+                height: 100,
+                width: 100,
+                child: Image.asset("assets/progresscrop.gif"))):Container()
+        ]
       ),
     );
   }
@@ -348,6 +366,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
     catch(e){
+      setState(() {
+        progress = false;
+      });
       Fluttertoast.showToast(msg: e.toString());
     }
   }

@@ -1,16 +1,15 @@
 // @dart=2.9
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icu/screens/ChatPackage/FirebaseApi.dart';
 import 'package:icu/screens/Images/ImageUpload.dart';
-import 'package:icu/screens/home_screen/Home.dart';
+import 'package:icu/screens/Like/likescreen.dart';
+import 'package:icu/screens/Settings/FullSettings.dart';
 import 'package:icu/screens/home_screen/home_screen.dart';
-import 'package:icu/screens/login_screen/login_screen.dart';
+import 'package:icu/screens/splash_screen/splash_screen.dart';
 import 'screens/login_screen/otp_screen.dart';
 import 'package:icu/screens/profileinfo/UserInfo.dart';
 import 'package:icu/screens/questions/Questions.dart';
-import 'package:icu/screens/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

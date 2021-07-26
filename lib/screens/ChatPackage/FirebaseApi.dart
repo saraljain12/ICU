@@ -71,7 +71,6 @@ class _ChatState extends State<Chat> {
          Map<String, dynamic>data = docSnapshot.data();
          url = data['image1url'];
          name = data['name'];
-        // Fluttertoast.showToast(msg: url);
        });
      }
    }

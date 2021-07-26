@@ -74,7 +74,7 @@ class _MyQuestionsState extends State<Questions> {
   Map<String,dynamic> demodata= {};
 
   void _answerQuestion(String text) {
-   Fluttertoast.showToast(msg: text.toString());
+   // Fluttertoast.showToast(msg: text.toString());
     setState(() {
       _questionIndex = _questionIndex + 1;
     });

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:icu/screens/ChatPackage/FirebaseApi.dart';
 import 'package:intl/intl.dart';
 
@@ -24,6 +25,8 @@ class _ChatScreenState extends State<ChatScreen> {
   DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
       FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
 
+
+  CollectionReference match = FirebaseFirestore.instance.collection("Match");
   getimage() async{
     var docSnapshot = await docref.get();
     if (docSnapshot.exists) {
@@ -33,12 +36,29 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
   }
+  static bool exist = false;
+
+  Future<bool> checkExist() async {
+    final String uid = _auth.currentUser.uid;
+    try {
+      await FirebaseFirestore.instance.doc("Match/$uid").get().then((doc) {
+        setState(() {
+        exist = doc.exists;
+        });
+      });
+      return exist;
+    } catch (e) {
+      // If any error
+      return false;
+    }
+  }
   initState(){
     getimage();
+    checkExist();
   }
 
   Widget Chatlist (double width){
-    return StreamBuilder(
+    return exist ? StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Match").doc(uid).snapshots(),
           builder:(context,snapshot) {
               return (snapshot.hasData) ? ListView.separated(
@@ -58,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ) : Container();
             }
-    );
+    ):Container();
   }
 
   @override

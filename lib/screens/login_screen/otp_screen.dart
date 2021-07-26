@@ -85,7 +85,8 @@ class _OtpScreenState extends State<OtpScreen> {
             opacity: 0.5,
 
             child: Stack(
-              children: [Container(
+              children: [
+                Container(
                 padding: const EdgeInsets.all(16.0),
                 width: double.infinity,
                 child: Column(

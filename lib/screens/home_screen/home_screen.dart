@@ -1,5 +1,9 @@
 //@dart=2.9
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:icu/screens/Like/likescreen.dart';
+import 'package:icu/screens/Notifications/notifications.dart';
+import 'package:icu/screens/Settings/Settings.dart';
 import '../ChatPackage/ChatScreen.dart';
 import 'package:icu/screens/home_screen/Home.dart';
 
@@ -9,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex=0;
+  int _currentIndex=3;
 
   @override
   void initState() {
@@ -24,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .height;
     return  Scaffold(
       body: Center(
-        child: (_currentIndex==0)?HomeContent():ChatScreen(),
+        child:(_currentIndex==0)?HomeContent():(_currentIndex==1)?ChatScreen():(_currentIndex==2)?LikeScreen():(_currentIndex==3)?notification():SettingsContent(),
       ),
       bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -34,26 +38,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 colors: [Color(0xfffd297b), Color(0xffff655b)]),
           ),
           child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: SvgPicture.asset("assets/icons/home.svg",height: 25,color: (_currentIndex!=0)?Colors.white54:Colors.white,),
                 label: 'Home',
                 backgroundColor: Colors.transparent
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
+                icon:SvgPicture.asset("assets/icons/chat.svg",height: 25,color: (_currentIndex!=1)?Colors.white54:Colors.white,),
                 label: 'Chat',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
+                icon: SvgPicture.asset("assets/icons/like.svg",height: 25,color: (_currentIndex!=2)?Colors.white54:Colors.white,),
                 label: 'Like',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
+                icon: SvgPicture.asset("assets/icons/noti.svg",height: 25,color: (_currentIndex!=3)?Colors.white54:Colors.white,),
                 label: 'Notifications',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: SvgPicture.asset("assets/icons/user.svg",height: 25,color: (_currentIndex!=4)?Colors.white54:Colors.white,),
                 label: 'Profile',
               ),
             ],
@@ -75,5 +79,4 @@ class _HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
     });
   }
-
 }

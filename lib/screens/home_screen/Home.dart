@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeContent extends StatefulWidget {
   @override
@@ -12,9 +13,9 @@ class _HomeContentState extends State<HomeContent>{
   String url;
 
   DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
-    FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
+      FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
 
-      getimage() async{
+  getimage() async{
        var docSnapshot = await docref.get();
        if (docSnapshot.exists) {
          setState(() {
@@ -35,7 +36,7 @@ class _HomeContentState extends State<HomeContent>{
         borderRadius: BorderRadius.only(
         ),
       ),
-      margin: EdgeInsets.only(top: 24),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: SizedBox(
         height: 75,
         child: ListView(
@@ -265,91 +266,120 @@ class _HomeContentState extends State<HomeContent>{
                             ],
                           ),
                         ),
-                        // Container(
-                        //   margin: EdgeInsets.only(right: 0),
-                        //     width: 55,
-                        //     height: 55,
-                        //     decoration: new BoxDecoration(
-                        //       color: Color(0xffffffff),
-                        //       boxShadow: [BoxShadow(
-                        //           color: Color(0x29000000),
-                        //           offset: Offset(0,3),
-                        //           blurRadius: 6,
-                        //           spreadRadius: 0
-                        //       ) ],
-                        //     ),
-                        //   child: GestureDetector(
-                        //     child: SvgPicture.asset(
-                        //         "assets/icons/star.svg",
-                        //         semanticsLabel: 'Acme Logo'
-                        //     ),
-                        //   ),
-                        // )
+                        GestureDetector(
+                          child: Container(
+                              margin: EdgeInsets.only(right:screenWidth*0.0677,bottom: screenHeight*0.01),
+                              width: 44,
+                              height: 44,
+                              padding: EdgeInsets.all(7),
+                              decoration: new BoxDecoration(
+                                color: Color(0xffffffff),
+                                boxShadow: [BoxShadow(
+                                    color: Color(0x29000000),
+                                    offset: Offset(0,3),
+                                    blurRadius: 6,
+                                    spreadRadius: 0
+                                ) ],
+                                shape: BoxShape.circle
+                              ),
+                              child: SvgPicture.asset(
+                                  "assets/icons/star.svg",
+                              )
+                          ),
+                        )
                       ],
                     ),
-
                   ]),
-              SizedBox(height: screenHeight*0.02),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: screenWidth*0.913,
-                  height: screenHeight*0.18,
-                  padding: EdgeInsets.only(left: screenWidth*0.025,top: screenWidth*0.025),
-                  decoration: new BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: [BoxShadow(
-                        color: Color(0x29000000),
-                        offset: Offset(0,0),
-                        blurRadius: 6,
-                        spreadRadius: 0
-                    ) ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Bio",
-                          style: TextStyle(
-                            fontFamily: 'Rubik',
-                            color: Color(0xff333343),
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.normal,
-                          )
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text("Every day might not be a good day but there is good in every day.",
-                          style: TextStyle(
-                            fontFamily: 'Rubik',
-                            color: Color(0xff6d7278),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                          )
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      GestureDetector(
-                        child: Text("SEE FULL PROFILE",style: TextStyle(
-                          color: Color(0xfffe5d5e),fontFamily: 'Gotham',fontWeight: FontWeight.w400
-                          ),
+              Stack(
+                children: [
+                  Column(
+                  children: [
+                    SizedBox(height: screenHeight*0.03),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: screenWidth*0.913,
+                        height: screenHeight*0.18,
+                        padding: EdgeInsets.only(left: screenWidth*0.025,top: screenWidth*0.025),
+                        decoration: new BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [BoxShadow(
+                              color: Color(0x29000000),
+                              offset: Offset(0,0),
+                              blurRadius: 6,
+                              spreadRadius: 0
+                          ) ],
                         ),
-                      )
-                    ],
-                  ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Bio",
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  color: Color(0xff333343),
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text("Every day might not be a good day but there is good in every day.",
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  color: Color(0xff6d7278),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            GestureDetector(
+                              child: Text("SEE FULL PROFILE",style: TextStyle(
+                                  color: Color(0xfffe5d5e),fontFamily: 'Gotham',fontWeight: FontWeight.w400
+                              ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      child: Container(
+                          margin: EdgeInsets.only(right:screenWidth*0.0677,top: screenHeight*0.01),
+                          width: 44,
+                          height: 44,
+                          padding: EdgeInsets.all(7),
+                          decoration: new BoxDecoration(
+                              color: Color(0xffffffff),
+                              boxShadow: [BoxShadow(
+                                  color: Color(0x29000000),
+                                  offset: Offset(0,3),
+                                  blurRadius: 6,
+                                  spreadRadius: 0
+                              ) ],
+                              shape: BoxShape.circle
+                          ),
+                          child: Image.asset(
+                            "assets/icons/match%.png",
+                          )
+                      ),
+                    ),
+                  )
+              ])
             ]
-      ),
+          ),
         ),
         Stories(context,screenWidth),
       ],
     );
   }
-
-
 }

@@ -451,7 +451,7 @@ class _FormPageState extends State<FormPage> {
                     ),
                     Text(
                       'I have read and accept terms and conditions',
-                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13),
                     )
                   ],
                 ),

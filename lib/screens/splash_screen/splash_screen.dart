@@ -77,6 +77,7 @@ class SplashState extends State<SplashScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              SizedBox(height: MediaQuery.of(context).size.height*0.25,),
                               Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -100,7 +101,16 @@ class SplashState extends State<SplashScreen> {
                               SizedBox(height: MediaQuery.of(context).size.height*0.01,),
                               Text("i choose you",style: TextStyle(fontFamily: 'Kaushan',color: Colors.white,fontSize: 30),),
                               SizedBox(height: MediaQuery.of(context).size.height*0.01,),
-                              Text("Let's choose your favourite",style: TextStyle(fontFamily: 'Sanchez',color: Colors.white,fontSize: 18),)
+                              Text("Let's choose your favourite",style: TextStyle(fontFamily: 'Sanchez',color: Colors.white,fontSize: 18),),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white
+                                  ),
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.asset("assets/progresscrop.gif"))
                           ]),
             )
         ])
