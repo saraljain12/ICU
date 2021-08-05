@@ -18,7 +18,7 @@ class Questions extends StatefulWidget {
 class _MyQuestionsState extends State<Questions> {
   final _questions = const [
     {
-      'questionText': ' Who created Flutter?',
+      'questionText': 'Who created flutter',
       'answers': [
         {'text': 'Facebook', 'score': -2},
         {'text': 'Adobe', 'score': -2},
@@ -59,13 +59,13 @@ class _MyQuestionsState extends State<Questions> {
     },
     {
       'questionText':
-      ' Is Flutter for Web and Desktop available in stable version?',
+      'prefgender',
       'answers': [
         {
-          'text': 'Yes',
+          'text': 'Male',
           'score': -2,
         },
-        {'text': 'No', 'score': 10},
+        {'text': 'Female', 'score': 10},
       ],
     },
   ];
@@ -74,14 +74,13 @@ class _MyQuestionsState extends State<Questions> {
   Map<String,dynamic> demodata= {};
 
   void _answerQuestion(String text) {
-   // Fluttertoast.showToast(msg: text.toString());
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
    String uid = FirebaseAuth.instance.currentUser.uid;
    demodata.addAll({_questions[_questionIndex-1].values.elementAt(0):text.toString()});
-   CollectionReference collectionReference = FirebaseFirestore.instance.collection('Users').doc(uid).collection('Questions');
-   collectionReference.doc('Question').set(demodata);
+   DocumentReference docReference = FirebaseFirestore.instance.collection('Users').doc(uid);
+   docReference.update(demodata);
 
     if (_questionIndex < _questions.length) {
       print('We have more questions!');

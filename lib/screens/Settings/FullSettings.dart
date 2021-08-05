@@ -1,6 +1,7 @@
 //@dart=2.9
 import 'dart:io';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:icu/screens/Settings/IntrestContainer.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,10 +26,12 @@ class _FullSettingsState extends State<FullSettings> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   String urll1,urll2,urll3,urll4,urll5,urll6;
   final _fireStorage = FirebaseStorage.instance;
+  Position _currentPosition;
+  String city,state,address;
 
   _imgFromCamera1() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     ));
 
     setState(() {
@@ -43,7 +48,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery1() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image1').putFile(File(image.path)).whenComplete(() async {
@@ -88,7 +93,7 @@ class _FullSettingsState extends State<FullSettings> {
 
   _imgFromCamera2() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image2').putFile(File(image.path)).whenComplete(()async {
@@ -102,7 +107,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery2() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image2').putFile(File(image.path)).whenComplete(() async {
@@ -147,7 +152,7 @@ class _FullSettingsState extends State<FullSettings> {
 
   _imgFromCamera3() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image3').putFile(File(image.path)).whenComplete(() async {
@@ -161,7 +166,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery3() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image3').putFile(File(image.path)).whenComplete(() async {
@@ -206,7 +211,7 @@ class _FullSettingsState extends State<FullSettings> {
 
   _imgFromCamera4() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality:30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image4').putFile(File(image.path)).whenComplete(() async {
@@ -220,7 +225,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery4() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image4').putFile(File(image.path)).whenComplete(() async {
@@ -265,7 +270,7 @@ class _FullSettingsState extends State<FullSettings> {
 
   _imgFromCamera5() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image5').putFile(File(image.path)).whenComplete(() async {
@@ -279,7 +284,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery5() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image5').putFile(File(image.path)).whenComplete(() async {
@@ -324,7 +329,7 @@ class _FullSettingsState extends State<FullSettings> {
 
   _imgFromCamera6() async {
     image = (await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image6').putFile(File(image.path)).whenComplete(() async {
@@ -338,7 +343,7 @@ class _FullSettingsState extends State<FullSettings> {
   }
   _imgFromGallery6() async {
     image = (await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     ));
     setState(() {
       _fireStorage.ref().child('Images/$uid/image6').putFile(File(image.path)).whenComplete(() async {
@@ -383,7 +388,7 @@ class _FullSettingsState extends State<FullSettings> {
 
 
   DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
-      FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
+      FirebaseAuth.instance.currentUser.uid);
 
 
 
@@ -665,9 +670,6 @@ class _FullSettingsState extends State<FullSettings> {
     }
   }
 
-
-
-
   @override
   void didChangeDependencies() {
     getimage();
@@ -796,7 +798,7 @@ class _FullSettingsState extends State<FullSettings> {
     );
   }
 
-  Widget imagepick(){
+  Widget imagepick(double width){
     var ref = FirebaseStorage.instance
         .ref()
         .child('Images')
@@ -816,6 +818,8 @@ class _FullSettingsState extends State<FullSettings> {
                       urll1 == null?_showPicker(context): (){};
                     },
                     child: Container(
+                      height: 150,
+                      width: width/3,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -831,7 +835,7 @@ class _FullSettingsState extends State<FullSettings> {
                       urll1 == null ?
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(20))
                         ),
                         width: 100,
@@ -858,12 +862,19 @@ class _FullSettingsState extends State<FullSettings> {
                         child: Container(
                           child: Stack(
                               children: [
-                                Image.network(
-                                urll1,
-                                width: 100,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
+                                CachedNetworkImage(
+                                  height: 150,
+                                  imageUrl:urll1,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                    child: SizedBox(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                                  fit: BoxFit.fill,
+                                ),
                                 urll2!=null?Container(
                                     margin: EdgeInsets.only(left: 4,top: 4),
                                     decoration: BoxDecoration(
@@ -891,7 +902,7 @@ class _FullSettingsState extends State<FullSettings> {
                   absorbing: urll1==null?true:false,
                   child: urll1==null?
                   Container(
-                    decoration: BoxDecoration(color: Colors.grey[200],
+                    decoration: BoxDecoration(color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
@@ -900,7 +911,7 @@ class _FullSettingsState extends State<FullSettings> {
                           blurRadius: 6.0,
                         ),
                       ],),
-                    width: 100,
+                    width: width/3,
                     height: 150,
                   )
                       :GestureDetector(
@@ -908,6 +919,8 @@ class _FullSettingsState extends State<FullSettings> {
                         urll2 == null?_showPicker2(context):(){};
                       },
                       child: Container(
+                        width: width/3,
+                        height: 150,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -926,8 +939,6 @@ class _FullSettingsState extends State<FullSettings> {
                               borderRadius: BorderRadius.all(Radius.circular(20)),
                             border: Border.all(color: Color(0xfffd436c),width: 4),
                           ),
-                          width: 100,
-                          height: 150,
                           child: Center(
                             child: Container(
                               padding: EdgeInsets.all(8),
@@ -949,10 +960,18 @@ class _FullSettingsState extends State<FullSettings> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           child: Container(
                             child: Stack(
-                                children: [Image.network(
-                                  urll2,
-                                  width: 100,
-                                  height: 150,
+                                children: [
+                                  CachedNetworkImage(
+                                    height: 150,
+                                  imageUrl:urll2,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                    child: SizedBox(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => new Icon(Icons.error),
                                   fit: BoxFit.cover,
                                 ),
                                   Container(
@@ -983,7 +1002,7 @@ class _FullSettingsState extends State<FullSettings> {
                   absorbing: urll2==null?true:false,
                   child: urll2==null?
                   Container(
-                    decoration: BoxDecoration(color: Colors.grey[200],
+                    decoration: BoxDecoration(color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
@@ -992,7 +1011,7 @@ class _FullSettingsState extends State<FullSettings> {
                           blurRadius: 6.0,
                         ),
                       ],),
-                    width: 100,
+                    width: width/3,
                     height: 150,
                   )
                       :GestureDetector(
@@ -1000,6 +1019,8 @@ class _FullSettingsState extends State<FullSettings> {
                       urll3 == null?_showPicker3(context):(){};
                     },
                     child: Container(
+                      width: width/3,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -1041,10 +1062,17 @@ class _FullSettingsState extends State<FullSettings> {
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Container(
                           child: Stack(
-                              children: [Image.network(
-                                urll3,
-                                width: 100,
+                              children: [CachedNetworkImage(
                                 height: 150,
+                                imageUrl:urll3,
+                                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                  child: SizedBox(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => new Icon(Icons.error),
                                 fit: BoxFit.cover,
                               ),
                                 Container(
@@ -1082,7 +1110,7 @@ class _FullSettingsState extends State<FullSettings> {
                   absorbing: urll3==null?true:false,
                   child: urll3==null?
                   Container(
-                    decoration: BoxDecoration(color: Colors.grey[200],
+                    decoration: BoxDecoration(color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
@@ -1091,7 +1119,7 @@ class _FullSettingsState extends State<FullSettings> {
                           blurRadius: 6.0,
                         ),
                       ],),
-                    width: 100,
+                    width: width/3,
                     height: 150,
                   )
                       :GestureDetector(
@@ -1099,6 +1127,8 @@ class _FullSettingsState extends State<FullSettings> {
                         urll4 == null?_showPicker4(context):(){};
                       },
                       child:Container(
+                        width: width/3,
+                        height: 150,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -1117,7 +1147,7 @@ class _FullSettingsState extends State<FullSettings> {
                               borderRadius: BorderRadius.all(Radius.circular(20)),
                               border: Border.all(color: Color(0xfffd436c),width: 4),
                           ),
-                          width: 100,
+                          width: width/3,
                           height: 150,
                           child: Center(
                             child: Container(
@@ -1139,11 +1169,20 @@ class _FullSettingsState extends State<FullSettings> {
                         ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           child: Container(
+                            width: width/3,
+                            height: 150,
                             child: Stack(
-                                children: [Image.network(
-                                  urll4,
-                                  width: 100,
+                                children: [CachedNetworkImage(
                                   height: 150,
+                                  imageUrl:urll4,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                    child: SizedBox(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => new Icon(Icons.error),
                                   fit: BoxFit.cover,
                                 ),
                                   Container(
@@ -1174,7 +1213,7 @@ class _FullSettingsState extends State<FullSettings> {
                   absorbing: urll4==null?true:false,
                   child: urll4==null?
                   Container(
-                    decoration: BoxDecoration(color: Colors.grey[200],
+                    decoration: BoxDecoration(color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
@@ -1183,7 +1222,7 @@ class _FullSettingsState extends State<FullSettings> {
                           blurRadius: 6.0,
                         ),
                       ],),
-                    width: 100,
+                    width: width/3,
                     height: 150,
                   )
                       :GestureDetector(
@@ -1191,6 +1230,8 @@ class _FullSettingsState extends State<FullSettings> {
                       urll5 == null?_showPicker5(context):(){};
                     },
                     child: Container(
+                      width: width/3,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -1209,7 +1250,7 @@ class _FullSettingsState extends State<FullSettings> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           border: Border.all(color: Color(0xfffd436c),width: 4),
                         ),
-                        width: 100,
+                        width: width/3,
                         height: 150,
                         child: Center(
                           child: Container(
@@ -1231,12 +1272,21 @@ class _FullSettingsState extends State<FullSettings> {
                       ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Container(
+                          width: width/3,
+                          height: 150,
                           child: Stack(
-                              children: [Image.network(
-                                urll5,
-                                width: 100,
+                              children: [CachedNetworkImage(
                                 height: 150,
-                                fit: BoxFit.cover,
+                                imageUrl:urll5,
+                                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                  child: SizedBox(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => new Icon(Icons.error),
+                                fit: BoxFit.fill,
                               ),
                                 Container(
                                     margin: EdgeInsets.only(left: 4,top: 4),
@@ -1266,7 +1316,7 @@ class _FullSettingsState extends State<FullSettings> {
                   absorbing: urll5==null?true:false,
                   child: urll5==null?
                   Container(
-                    decoration: BoxDecoration(color: Colors.grey[200],
+                    decoration: BoxDecoration(color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
@@ -1275,14 +1325,16 @@ class _FullSettingsState extends State<FullSettings> {
                           blurRadius: 6.0,
                         ),
                       ],),
-                    width: 100,
+                    width: width/3,
                     height: 150,
                   )
                       :GestureDetector(
                     onTap: () {
                       urll6 == null?_showPicker6(context):(){};
                     },
-                    child: Container(
+                        child: Container(
+                          width: width/3,
+                          height: 150,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -1295,15 +1347,15 @@ class _FullSettingsState extends State<FullSettings> {
                         ],
                       ),
                       child: urll6 == null ?
-                      Container(
+                          Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           border: Border.all(color: Color(0xfffd436c),width: 4),
                         ),
-                        width: 100,
-                        height: 150,
-                        child: Center(
+                            width: width/3,
+                            height: 150,
+                           child: Center(
                           child: Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
@@ -1320,14 +1372,23 @@ class _FullSettingsState extends State<FullSettings> {
                           ),
                         ),
                       ):
-                      ClipRRect(
+                          ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Container(
+                          width:width/3,
+                          height: 150,
                           child: Stack(
-                              children: [Image.network(
-                                urll6,
-                                width: 100,
+                              children: [CachedNetworkImage(
                                 height: 150,
+                                imageUrl:urll6,
+                                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                  child: SizedBox(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: new CircularProgressIndicator(color: Colors.red,value: downloadProgress.progress,),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => new Icon(Icons.error),
                                 fit: BoxFit.cover,
                               ),
                                 Container(
@@ -1368,11 +1429,28 @@ class _FullSettingsState extends State<FullSettings> {
    return MaterialApp(
      debugShowCheckedModeBanner: false,
      home: Scaffold(
+       appBar: AppBar(
+       backgroundColor: Colors.white,
+       centerTitle: true,
+       automaticallyImplyLeading: true,
+       leading: GestureDetector(
+         onTap:()=> Navigator.pop(context),
+           child: Icon(Icons.arrow_back_ios,color: Colors.black,)
+       ),
+       title: Text("Settings",
+           style: TextStyle(
+             fontFamily: 'Rubik',
+             color: Color(0xff333343),
+             fontSize: 20,
+             fontWeight: FontWeight.w500,
+             fontStyle: FontStyle.normal,
+           )
+       ),
+     ),
        body: SingleChildScrollView(
          child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            children: [
-             toprow(context, width),
              SizedBox(height: 25),
              Container(
                margin: EdgeInsets.only(left: 20),
@@ -1381,7 +1459,7 @@ class _FullSettingsState extends State<FullSettings> {
                      fontFamily: 'Rubik',
                      color: Color(0xff333343),
                      fontSize: 20,
-                     fontWeight: FontWeight.w500,
+                     fontWeight: FontWeight.w600,
                      fontStyle: FontStyle.normal,
                      letterSpacing: 0.16,
                    )
@@ -1397,7 +1475,7 @@ class _FullSettingsState extends State<FullSettings> {
                      fontFamily: 'Rubik',
                      color: Color(0xff333343),
                      fontSize: 20,
-                     fontWeight: FontWeight.w500,
+                     fontWeight: FontWeight.w600,
                      fontStyle: FontStyle.normal,
                      letterSpacing: 0.16,
                    )
@@ -1413,18 +1491,351 @@ class _FullSettingsState extends State<FullSettings> {
                      fontFamily: 'Rubik',
                      color: Color(0xff333343),
                      fontSize: 20,
-                     fontWeight: FontWeight.w500,
+                     fontWeight: FontWeight.w600,
                      fontStyle: FontStyle.normal,
                      letterSpacing: 0.16,
                    )
                ),
              ),
              SizedBox(height: 10),
-             imagepick()
+             imagepick(width-40),
+             SizedBox(height: 10),
+
+             Container(
+               margin: EdgeInsets.only(left: 20),
+               child: Text("Questions",
+                   style: TextStyle(
+                     fontFamily: 'Rubik',
+                     color: Color(0xff333343),
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     fontStyle: FontStyle.normal,
+                     letterSpacing: 0.16,
+                   )
+               ),
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+               onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+               child: Container(
+                 height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                     border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Text("Answer questions to increase match%",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Color(0xff333343),
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ),
+                     Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                   ],
+                ),
+               )
+             ),
+             SizedBox(height: 10),
+             Container(
+               margin: EdgeInsets.only(left: 20),
+               child: Text("Show me",
+                   style: TextStyle(
+                     fontFamily: 'Rubik',
+                     color: Color(0xff333343),
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     fontStyle: FontStyle.normal,
+                     letterSpacing: 0.16,
+                   )
+               ),
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+                 // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Select Your Intrest",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+             Container(
+               margin: EdgeInsets.only(left: 20),
+               child: Text("Age Range",
+                   style: TextStyle(
+                     fontFamily: 'Rubik',
+                     color: Color(0xff333343),
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     fontStyle: FontStyle.normal,
+                     letterSpacing: 0.16,
+                   )
+               ),
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+                 // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Select Age Range",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+
+             Container(
+               margin: EdgeInsets.only(left: 20),
+               child: Text("location",
+                   style: TextStyle(
+                     fontFamily: 'Rubik',
+                     color: Color(0xff333343),
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     fontStyle: FontStyle.normal,
+                     letterSpacing: 0.16,
+                   )
+               ),
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+               // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Change Location",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+
+             Container(
+               margin: EdgeInsets.only(left: 20),
+               child: Text("App Settings",
+                   style: TextStyle(
+                     fontFamily: 'Rubik',
+                     color: Color(0xff333343),
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     fontStyle: FontStyle.normal,
+                     letterSpacing: 0.16,
+                   )
+               ),
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+               // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Terms and conditions",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+               // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Privacy policy",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+             GestureDetector(
+               // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   height: 40,
+                   margin: EdgeInsets.symmetric(horizontal: 25),
+                   padding: EdgeInsets.symmetric(horizontal: 12),
+
+                   decoration: new BoxDecoration(
+                       color: Color(0xffffffff),
+                       borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xffc7c7c8))
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text("Help and Support",
+                           style: TextStyle(
+                             fontFamily: 'Rubik',
+                             color: Color(0xff333343),
+                             fontSize: 14,
+                             fontWeight: FontWeight.w400,
+                             fontStyle: FontStyle.normal,
+                           )
+                       ),
+                       Icon(Icons.arrow_forward_ios_rounded,size: 18,)
+                     ],
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+
+             SizedBox(height: 10),
+             GestureDetector(
+               // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 child: Container(
+                   margin: EdgeInsets.only(left: 25),
+                     width: width*0.4,
+                     height: 40,
+                     decoration: new BoxDecoration(
+                         color: Color(0xffffffff),
+                         borderRadius: BorderRadius.circular(30),
+                       border: Border.all(color: Color(0xfffe456b))
+                     ),
+                   alignment: Alignment.center,
+                   child: Text("Log out",
+                       style: TextStyle(
+                         fontFamily: 'Rubik',
+                         color: Color(0xfffe456b),
+                         fontSize: 14,
+                         fontWeight: FontWeight.w500,
+                         fontStyle: FontStyle.normal,
+                       )
+                   ),
+                 )
+             ),
+             SizedBox(height: 10),
+
+
            ],
          ),
        ),
      ),
    );
+  }
+
+  _getCurrentLocation() async {
+    _currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    _getAddressFromCoordinates(Coordinates(_currentPosition.latitude, _currentPosition.longitude));
+  }
+  _getAddressFromCoordinates(Coordinates cords) async {
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(cords);
+    var first = addresses.first;
+    FirebaseFirestore.instance.collection("Users").doc(
+        FirebaseAuth.instance.currentUser.uid).update({
+      "city" :first.subAdminArea,
+      "state": first.adminArea,
+      "address": first.addressLine,
+    });
+  }
+
+  Logout() {
+    FirebaseAuth.instance.signOut();
+    Navigator.pushReplacementNamed(context,'/LoginPage');
+
   }
 }

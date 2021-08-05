@@ -22,7 +22,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   _imgFromCamera1() async {
      image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image1 = File(image.path);
@@ -30,7 +30,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery1() async {
     image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
     setState(() {
       _image1 =File(image.path);
@@ -38,7 +38,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromCamera2() async {
      image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image2 = File(image.path);
@@ -46,7 +46,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery2() async {
      image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
 
     setState(() {
@@ -55,7 +55,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromCamera3() async {
     final PickedFile image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image3 = File(image.path);
@@ -63,7 +63,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery3() async {
     PickedFile image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
 
     setState(() {
@@ -72,7 +72,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromCamera4() async {
     final PickedFile image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image4 = File(image.path);
@@ -80,7 +80,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery4() async {
     PickedFile image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
 
     setState(() {
@@ -89,7 +89,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromCamera5() async {
     final PickedFile image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image5 = File(image.path);
@@ -97,7 +97,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery5() async {
     PickedFile image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
 
     setState(() {
@@ -106,7 +106,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromCamera6() async {
     final PickedFile image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 30
     );
     setState(() {
       _image6 = File(image.path);
@@ -114,7 +114,7 @@ class _ImageScreenState extends State<ImageScreen> {
   }
   _imgFromGallery6() async {
     PickedFile image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 30
     );
 
     setState(() {
@@ -123,74 +123,85 @@ class _ImageScreenState extends State<ImageScreen> {
   }
 
   Future<void> _doSomething() async {
-    progress = true;
+    Fluttertoast.showToast(msg: "aaa");
     final _fireStorage = FirebaseStorage.instance;
     final firebaseauth = FirebaseAuth.instance;
     String uid = firebaseauth.currentUser.uid;
+    setState(() {
+      progress = true;
+    });
 
-   if(_image1!=null&&_image2!=null){
+   if(_image1!=null){
      DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
-         FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
+         FirebaseAuth.instance.currentUser.uid);
 
         await _fireStorage.ref().child('Images/$uid/image1').putFile(_image1).whenComplete(() async {
           String url1 = await _fireStorage.ref().child('Images/$uid/image1').getDownloadURL();
           await docref.update({"image1url" : url1});
-        });
-
-     await _fireStorage.ref().child('Images/$uid/image2').putFile(_image2).whenComplete(() async {
-       String url1 = await _fireStorage.ref().child('Images/$uid/image2').getDownloadURL();
-       await docref.update({"image2url" : url1});
-
-     });
-     if(_image3!=null){
-         await _fireStorage.ref().child('Images/$uid/image3').putFile(_image3).whenComplete(() async {
-           String url1 = await _fireStorage.ref().child('Images/$uid/image3').getDownloadURL();
-           await docref.update({"image3url" : url1});
-         });
-     }
-     if(_image4!=null){
-       try{
-           _fireStorage.ref().child('Images/$uid/image4').putFile(_image4).whenComplete(() async {
-             String url1 = await _fireStorage.ref().child('Images/$uid/image4').getDownloadURL();
-           await docref.update({"image3url" : url1});});
-         }
-        catch(Exception){
-        Fluttertoast.showToast(msg: Exception.toString());
+        }).onError((error, stackTrace) {Fluttertoast.showToast(msg: error);});
+           if(_image2!=null) {
+          await _fireStorage.ref().child('Images/$uid/image2')
+              .putFile(_image2)
+              .whenComplete(() async {
+            String url1 = await _fireStorage.ref()
+                .child('Images/$uid/image2')
+                .getDownloadURL();
+            await docref.update({"image2url": url1});
+          });
         }
-     }
-     if(_image5!=null){
-       try{
-            _fireStorage.ref().child('Images/$uid/image5').putFile(_image5).whenComplete(() async {
-             String url5 = await _fireStorage.ref().child('Images/$uid/image5').getDownloadURL();
-             await docref.update({"image5url" : url5});
-         });
-         }
-        catch(Exception){
-        Fluttertoast.showToast(msg: Exception.toString());
-        }
-     }
-     if(_image6!=null){
-       try{
-            _fireStorage.ref().child('Images/$uid/image6').putFile(_image6).whenComplete(() async {
-             String url6 =await  _fireStorage.ref().child('Images/$uid/image6').getDownloadURL();
-             await docref.update({"image6url" : url6});
+           if(_image3!=null){
+               await _fireStorage.ref().child('Images/$uid/image3').putFile(_image3).whenComplete(() async {
+                 String url1 = await _fireStorage.ref().child('Images/$uid/image3').getDownloadURL();
+                 await docref.update({"image3url" : url1});
+               });
+           }
+           if(_image4!=null){
+             try{
+                 _fireStorage.ref().child('Images/$uid/image4').putFile(_image4).whenComplete(() async {
+                   String url1 = await _fireStorage.ref().child('Images/$uid/image4').getDownloadURL();
+                 await docref.update({"image4url" : url1});});
+               }
+              catch(Exception){
+              Fluttertoast.showToast(msg: Exception.toString());
+              }
+           }
+           if(_image5!=null){
+             try{
+                  _fireStorage.ref().child('Images/$uid/image5').putFile(_image5).whenComplete(() async {
+                   String url5 = await _fireStorage.ref().child('Images/$uid/image5').getDownloadURL();
+                   await docref.update({"image5url" : url5});
+               });
+               }
+              catch(Exception){
+              Fluttertoast.showToast(msg: Exception.toString());
+              }
+           }
+           if(_image6!=null){
+             try{
+                  _fireStorage.ref().child('Images/$uid/image6').putFile(_image6).whenComplete(() async {
+                   String url6 =await  _fireStorage.ref().child('Images/$uid/image6').getDownloadURL();
+                   await docref.update({"image6url" : url6});
+               });
+             }
+             catch(Exception){
+               Fluttertoast.showToast(msg: Exception.toString());
+             }
+           }
 
-         });
-
-       }
-       catch(Exception){
-         Fluttertoast.showToast(msg: Exception.toString());
-       }
-     }
-     if(_DescriptionController.text.toString()!="null"){
-       await docref.update({"Description":_DescriptionController.text});
-     }
-     progress = false;
-     Navigator.pushReplacementNamed(context, '/QuestionScreen');
+           if(_DescriptionController.text.toString()!="null"){
+             await docref.update({"Description":_DescriptionController.text});
+           }
+           setState(() {
+             progress = false;
+           });
+           Navigator.pushReplacementNamed(context, '/QuestionScreen');
    }
    else{
-     progress=false;
-     Fluttertoast.showToast(msg: "Please select at least 2 images");
+     setState(() {
+       progress=false;
+     });
+
+     Fluttertoast.showToast(msg: "Please select at least 1 images");
    }
 
   }
@@ -381,618 +392,621 @@ class _ImageScreenState extends State<ImageScreen> {
   Widget build(BuildContext context) {
    return Material(
      child: (progress)?
-     Opacity(
-       opacity: 0.5,
-       child: Stack(
+       Stack(
            children: [
-             Column(
-               children: <Widget>[
-                 SizedBox(
-                   height: 32,
-                 ),
-                 Column(
-                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children:[
-                       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-                         GestureDetector(
-                             onTap: () {
-                               _image1 == null?_showPicker(context): (){};
-                             },
-                             child: Container(
-                               decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 boxShadow: [
-                                   BoxShadow(
-                                     color: Colors.grey,
-                                     offset: Offset(0.0, 1.0), //(x,y)
-                                     blurRadius: 6.0,
+             Opacity(
+               opacity: 0.1,
+               child: AbsorbPointer(
+                 absorbing: false,
+                 child: Column(
+                   children: <Widget>[
+                     SizedBox(
+                       height: 32,
+                     ),
+                     Column(
+                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         children:[
+                           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
+                             GestureDetector(
+                                 onTap: () {
+                                   _image1 == null?_showPicker(context): (){};
+                                 },
+                                 child: Container(
+                                   decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     boxShadow: [
+                                       BoxShadow(
+                                         color: Colors.grey,
+                                         offset: Offset(0.0, 1.0), //(x,y)
+                                         blurRadius: 6.0,
+                                       ),
+                                     ],
                                    ),
-                                 ],
-                               ),
-                               child: _image1 == null ?
+                                   child: _image1 == null ?
+                                   Container(
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey[200],
+                                         borderRadius: BorderRadius.all(Radius.circular(20))
+                                     ),
+                                     width: 100,
+                                     height: 150,
+                                     child: Center(
+                                       child: Container(
+                                         padding: EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                           shape: BoxShape.circle,
+                                           gradient: LinearGradient(
+                                               begin: Alignment.centerLeft,
+                                               end: Alignment.centerRight,
+                                               colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                         ),
+                                         child: Icon(
+                                           Icons.add_photo_alternate_rounded,
+                                           color: Colors.white,
+                                         ),
+                                       ),
+                                     ),
+                                   ):
+                                   ClipRRect(
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     child: Container(
+                                       child: Stack(
+                                           children: [Image.file(
+                                             _image1,
+                                             width: 100,
+                                             height: 150,
+                                             fit: BoxFit.cover,
+                                           ),
+                                             Container(
+                                                 margin: EdgeInsets.only(left: 2,top: 2),
+                                                 decoration: BoxDecoration(
+                                                   shape: BoxShape.circle,
+                                                   gradient: LinearGradient(
+                                                       begin: Alignment.centerLeft,
+                                                       end: Alignment.centerRight,
+                                                       colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                 ),
+                                                 child: GestureDetector(
+                                                     onTap: (){
+                                                       setState(() {
+                                                         _image1 = _image2;
+                                                         _image2 = _image3;
+                                                         _image3 = _image4;
+                                                         _image4 = _image5;
+                                                         _image5 = _image6;
+                                                         _image6 = null;
+                                                       });
+                                                     },
+                                                     child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                 )
+                                             ),
+                                           ]),
+                                     ),
+                                   ),
+                                 )
+                             ),
+                             AbsorbPointer(
+                               absorbing: _image1==null?true:false,
+                               child: _image1==null?
                                Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.grey[200],
-                                     borderRadius: BorderRadius.all(Radius.circular(20))
-                                 ),
+                                 decoration: BoxDecoration(color: Colors.grey[200],
+                                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                   boxShadow: [
+                                     BoxShadow(
+                                       color: Colors.grey,
+                                       offset: Offset(0.0, 1.0), //(x,y)
+                                       blurRadius: 6.0,
+                                     ),
+                                   ],),
                                  width: 100,
                                  height: 150,
-                                 child: Center(
+                               )
+                                   :GestureDetector(
+                                   onTap: () {
+                                     _image2 == null?_showPicker2(context):(){};
+                                   },
                                    child: Container(
-                                     padding: EdgeInsets.all(8),
                                      decoration: BoxDecoration(
-                                       shape: BoxShape.circle,
-                                       gradient: LinearGradient(
-                                           begin: Alignment.centerLeft,
-                                           end: Alignment.centerRight,
-                                           colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                     ),
-                                     child: Icon(
-                                       Icons.add_photo_alternate_rounded,
                                        color: Colors.white,
+                                       borderRadius: BorderRadius.all(Radius.circular(20)),
+                                       boxShadow: [
+                                         BoxShadow(
+                                           color: Colors.grey,
+                                           offset: Offset(0.0, 1.0), //(x,y)
+                                           blurRadius: 6.0,
+                                         ),
+                                       ],
+                                     ),
+                                     child: _image2 == null ?
+                                     Container(
+                                       decoration: BoxDecoration(
+                                           color: Colors.grey[200],
+                                           borderRadius: BorderRadius.all(Radius.circular(20))
+                                       ),
+                                       width: 100,
+                                       height: 150,
+                                       child: Center(
+                                         child: Container(
+                                           padding: EdgeInsets.all(8),
+                                           decoration: BoxDecoration(
+                                             shape: BoxShape.circle,
+                                             gradient: LinearGradient(
+                                                 begin: Alignment.centerLeft,
+                                                 end: Alignment.centerRight,
+                                                 colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                           ),
+                                           child: Icon(
+                                             Icons.add_photo_alternate_rounded,
+                                             color: Colors.white,
+                                           ),
+                                         ),
+                                       ),
+                                     ):
+                                     ClipRRect(
+                                       borderRadius: BorderRadius.all(Radius.circular(20)),
+                                       child: Container(
+                                         child: Stack(
+                                             children: [Image.file(
+                                               _image2,
+                                               width: 100,
+                                               height: 150,
+                                               fit: BoxFit.cover,
+                                             ),
+                                               Container(
+                                                   margin: EdgeInsets.only(left: 2,top: 2),
+                                                   decoration: BoxDecoration(
+                                                     shape: BoxShape.circle,
+                                                     gradient: LinearGradient(
+                                                         begin: Alignment.centerLeft,
+                                                         end: Alignment.centerRight,
+                                                         colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                   ),
+                                                   child: GestureDetector(
+                                                       onTap: (){
+                                                         setState(() {
+                                                           _image2 = _image3;
+                                                           _image3 = _image4;
+                                                           _image4 = _image5;
+                                                           _image5 = _image6;
+                                                           _image6 = null;
+                                                         });
+                                                       },
+                                                       child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                   )
+                                               ),
+                                             ]),
+                                       ),
+                                     ),
+                                   )
+                               ),
+                             ),
+                             AbsorbPointer(
+                               absorbing: _image2==null?true:false,
+                               child: _image2==null?
+                               Container(
+                                 decoration: BoxDecoration(color: Colors.grey[200],
+                                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                   boxShadow: [
+                                     BoxShadow(
+                                       color: Colors.grey,
+                                       offset: Offset(0.0, 1.0), //(x,y)
+                                       blurRadius: 6.0,
+                                     ),
+                                   ],),
+                                 width: 100,
+                                 height: 150,
+                               )
+                                   :GestureDetector(
+                                 onTap: () {
+                                   _image3 == null?_showPicker3(context):(){};
+                                 },
+                                 child: Container(
+                                   decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     boxShadow: [
+                                       BoxShadow(
+                                         color: Colors.grey,
+                                         offset: Offset(0.0, 1.0), //(x,y)
+                                         blurRadius: 6.0,
+                                       ),
+                                     ],
+                                   ),
+                                   child: _image3 == null ?
+                                   Container(
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey[200],
+                                         borderRadius: BorderRadius.all(Radius.circular(20))
+                                     ),
+                                     width: 100,
+                                     height: 150,
+                                     child: Center(
+                                       child: Container(
+                                         padding: EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                           shape: BoxShape.circle,
+                                           gradient: LinearGradient(
+                                               begin: Alignment.centerLeft,
+                                               end: Alignment.centerRight,
+                                               colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                         ),
+                                         child: Icon(
+                                           Icons.add_photo_alternate_rounded,
+                                           color: Colors.white,
+                                         ),
+                                       ),
+                                     ),
+                                   ):
+                                   ClipRRect(
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     child: Container(
+                                       child: Stack(
+                                           children: [Image.file(
+                                             _image3,
+                                             width: 100,
+                                             height: 150,
+                                             fit: BoxFit.cover,
+                                           ),
+                                             Container(
+                                                 margin: EdgeInsets.only(left: 2,top: 2),
+                                                 decoration: BoxDecoration(
+                                                   shape: BoxShape.circle,
+                                                   gradient: LinearGradient(
+                                                       begin: Alignment.centerLeft,
+                                                       end: Alignment.centerRight,
+                                                       colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                 ),
+                                                 child: GestureDetector(
+                                                     onTap: (){
+                                                       setState(() {
+                                                         _image3 = _image4;
+                                                         _image4 = _image5;
+                                                         _image5 = _image6;
+                                                         _image6 = null;
+                                                       });
+                                                     },
+                                                     child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                 )
+                                             ),
+                                           ]),
                                      ),
                                    ),
                                  ),
-                               ):
-                               ClipRRect(
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 child: Container(
-                                   child: Stack(
-                                       children: [Image.file(
-                                         _image1,
-                                         width: 100,
-                                         height: 150,
-                                         fit: BoxFit.cover,
-                                       ),
-                                         Container(
-                                             margin: EdgeInsets.only(left: 2,top: 2),
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               gradient: LinearGradient(
-                                                   begin: Alignment.centerLeft,
-                                                   end: Alignment.centerRight,
-                                                   colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                             ),
-                                             child: GestureDetector(
-                                                 onTap: (){
-                                                   setState(() {
-                                                     _image1 = _image2;
-                                                     _image2 = _image3;
-                                                     _image3 = _image4;
-                                                     _image4 = _image5;
-                                                     _image5 = _image6;
-                                                     _image6 = null;
-                                                   });
-                                                 },
-                                                 child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                             )
+                               ),
+                             ),
+                           ]),
+
+                           Container(height: 25),
+
+                           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
+                             AbsorbPointer(
+                               absorbing: _image3==null?true:false,
+                               child: _image3==null?
+                               Container(
+                                 decoration: BoxDecoration(color: Colors.grey[200],
+                                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                   boxShadow: [
+                                     BoxShadow(
+                                       color: Colors.grey,
+                                       offset: Offset(0.0, 1.0), //(x,y)
+                                       blurRadius: 6.0,
+                                     ),
+                                   ],),
+                                 width: 100,
+                                 height: 150,
+                               )
+                                   :GestureDetector(
+                                   onTap: () {
+                                     _image4 == null?_showPicker4(context):(){};
+                                   },
+                                   child:Container(
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.all(Radius.circular(20)),
+                                       boxShadow: [
+                                         BoxShadow(
+                                           color: Colors.grey,
+                                           offset: Offset(0.0, 1.0), //(x,y)
+                                           blurRadius: 6.0,
                                          ),
-                                       ]),
+                                       ],
+                                     ),
+                                     child: _image4 == null ?
+                                     Container(
+                                       decoration: BoxDecoration(
+                                           color: Colors.grey[200],
+                                           borderRadius: BorderRadius.all(Radius.circular(20))
+                                       ),
+                                       width: 100,
+                                       height: 150,
+                                       child: Center(
+                                         child: Container(
+                                           padding: EdgeInsets.all(8),
+                                           decoration: BoxDecoration(
+                                             shape: BoxShape.circle,
+                                             gradient: LinearGradient(
+                                                 begin: Alignment.centerLeft,
+                                                 end: Alignment.centerRight,
+                                                 colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                           ),
+                                           child: Icon(
+                                             Icons.add_photo_alternate_rounded,
+                                             color: Colors.white,
+                                           ),
+                                         ),
+                                       ),
+                                     ):
+                                     ClipRRect(
+                                       borderRadius: BorderRadius.all(Radius.circular(20)),
+                                       child: Container(
+                                         child: Stack(
+                                             children: [Image.file(
+                                               _image4,
+                                               width: 100,
+                                               height: 150,
+                                               fit: BoxFit.cover,
+                                             ),
+                                               Container(
+                                                   margin: EdgeInsets.only(left: 2,top: 2),
+                                                   decoration: BoxDecoration(
+                                                     shape: BoxShape.circle,
+                                                     gradient: LinearGradient(
+                                                         begin: Alignment.centerLeft,
+                                                         end: Alignment.centerRight,
+                                                         colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                   ),
+                                                   child: GestureDetector(
+                                                       onTap: (){
+                                                         setState(() {
+                                                           _image4 = _image5;
+                                                           _image5 = _image6;
+                                                           _image6 = null;
+                                                         });
+                                                       },
+                                                       child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                   )
+                                               ),
+                                             ]),
+                                       ),
+                                     ),
+                                   )
+                               ),
+                             ),
+                             AbsorbPointer(
+                               absorbing: _image4==null?true:false,
+                               child: _image4==null?
+                               Container(
+                                 decoration: BoxDecoration(color: Colors.grey[200],
+                                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                   boxShadow: [
+                                     BoxShadow(
+                                       color: Colors.grey,
+                                       offset: Offset(0.0, 1.0), //(x,y)
+                                       blurRadius: 6.0,
+                                     ),
+                                   ],),
+                                 width: 100,
+                                 height: 150,
+                               )
+                                   :GestureDetector(
+                                 onTap: () {
+                                   _image5 == null?_showPicker5(context):(){};
+                                 },
+                                 child: Container(
+                                   decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     boxShadow: [
+                                       BoxShadow(
+                                         color: Colors.grey,
+                                         offset: Offset(0.0, 1.0), //(x,y)
+                                         blurRadius: 6.0,
+                                       ),
+                                     ],
+                                   ),
+                                   child: _image5 == null ?
+                                   Container(
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey[200],
+                                         borderRadius: BorderRadius.all(Radius.circular(20))
+                                     ),
+                                     width: 100,
+                                     height: 150,
+                                     child: Center(
+                                       child: Container(
+                                         padding: EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                           shape: BoxShape.circle,
+                                           gradient: LinearGradient(
+                                               begin: Alignment.centerLeft,
+                                               end: Alignment.centerRight,
+                                               colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                         ),
+                                         child: Icon(
+                                           Icons.add_photo_alternate_rounded,
+                                           color: Colors.white,
+                                         ),
+                                       ),
+                                     ),
+                                   ):
+                                   ClipRRect(
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     child: Container(
+                                       child: Stack(
+                                           children: [Image.file(
+                                             _image5,
+                                             width: 100,
+                                             height: 150,
+                                             fit: BoxFit.cover,
+                                           ),
+                                             Container(
+                                                 margin: EdgeInsets.only(left: 2,top: 2),
+                                                 decoration: BoxDecoration(
+                                                   shape: BoxShape.circle,
+                                                   gradient: LinearGradient(
+                                                       begin: Alignment.centerLeft,
+                                                       end: Alignment.centerRight,
+                                                       colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                 ),
+                                                 child: GestureDetector(
+                                                     onTap: (){
+                                                       setState(() {
+                                                         _image5 = _image6;
+                                                         _image6 = null;
+                                                       });
+                                                     },
+                                                     child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                 )
+                                             ),
+                                           ]),
+                                     ),
+                                   ),
+                                 ),
+                               ),
+                             ),
+                             AbsorbPointer(
+                               absorbing: _image5==null?true:false,
+                               child: _image5==null?
+                               Container(
+                                 decoration: BoxDecoration(color: Colors.grey[200],
+                                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                                   boxShadow: [
+                                     BoxShadow(
+                                       color: Colors.grey,
+                                       offset: Offset(0.0, 1.0), //(x,y)
+                                       blurRadius: 6.0,
+                                     ),
+                                   ],),
+                                 width: 100,
+                                 height: 150,
+                               )
+                                   :GestureDetector(
+                                 onTap: () {
+                                   _image6 == null?_showPicker6(context):(){};
+                                 },
+                                 child: Container(
+                                   decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     boxShadow: [
+                                       BoxShadow(
+                                         color: Colors.grey,
+                                         offset: Offset(0.0, 1.0), //(x,y)
+                                         blurRadius: 6.0,
+                                       ),
+                                     ],
+                                   ),
+                                   child: _image6 == null ?
+                                   Container(
+                                     decoration: BoxDecoration(
+                                         color: Colors.grey[200],
+                                         borderRadius: BorderRadius.all(Radius.circular(20))
+                                     ),
+                                     width: 100,
+                                     height: 150,
+                                     child: Center(
+                                       child: Container(
+                                         padding: EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                           shape: BoxShape.circle,
+                                           gradient: LinearGradient(
+                                               begin: Alignment.centerLeft,
+                                               end: Alignment.centerRight,
+                                               colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                         ),
+                                         child: Icon(
+                                           Icons.add_photo_alternate_rounded,
+                                           color: Colors.white,
+                                         ),
+                                       ),
+                                     ),
+                                   ):
+                                   ClipRRect(
+                                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                                     child: Container(
+                                       child: Stack(
+                                           children: [Image.file(
+                                             _image6,
+                                             width: 100,
+                                             height: 150,
+                                             fit: BoxFit.cover,
+                                           ),
+                                             Container(
+                                                 margin: EdgeInsets.only(left: 2,top: 2),
+                                                 decoration: BoxDecoration(
+                                                   shape: BoxShape.circle,
+                                                   gradient: LinearGradient(
+                                                       begin: Alignment.centerLeft,
+                                                       end: Alignment.centerRight,
+                                                       colors: [Color(0xffFD297B), Color(0xffFF655B)]),
+                                                 ),
+                                                 child: GestureDetector(
+                                                     onTap: (){
+                                                       setState(() {
+                                                         _image6 = null;
+                                                       });
+                                                     },
+                                                     child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
+                                                 )
+                                             ),
+                                           ]),
+                                     ),
+                                   ),
                                  ),
                                ),
                              )
-                         ),
-                         AbsorbPointer(
-                           absorbing: _image1==null?true:false,
-                           child: _image1==null?
-                           Container(
-                             decoration: BoxDecoration(color: Colors.grey[200],
-                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                               boxShadow: [
-                                 BoxShadow(
-                                   color: Colors.grey,
-                                   offset: Offset(0.0, 1.0), //(x,y)
-                                   blurRadius: 6.0,
-                                 ),
-                               ],),
-                             width: 100,
-                             height: 150,
-                           )
-                               :GestureDetector(
-                               onTap: () {
-                                 _image2 == null?_showPicker2(context):(){};
-                               },
-                               child: Container(
-                                 decoration: BoxDecoration(
-                                   color: Colors.white,
-                                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                   boxShadow: [
-                                     BoxShadow(
-                                       color: Colors.grey,
-                                       offset: Offset(0.0, 1.0), //(x,y)
-                                       blurRadius: 6.0,
-                                     ),
-                                   ],
-                                 ),
-                                 child: _image2 == null ?
-                                 Container(
-                                   decoration: BoxDecoration(
-                                       color: Colors.grey[200],
-                                       borderRadius: BorderRadius.all(Radius.circular(20))
-                                   ),
-                                   width: 100,
-                                   height: 150,
-                                   child: Center(
-                                     child: Container(
-                                       padding: EdgeInsets.all(8),
-                                       decoration: BoxDecoration(
-                                         shape: BoxShape.circle,
-                                         gradient: LinearGradient(
-                                             begin: Alignment.centerLeft,
-                                             end: Alignment.centerRight,
-                                             colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                       ),
-                                       child: Icon(
-                                         Icons.add_photo_alternate_rounded,
-                                         color: Colors.white,
-                                       ),
-                                     ),
-                                   ),
-                                 ):
-                                 ClipRRect(
-                                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                   child: Container(
-                                     child: Stack(
-                                         children: [Image.file(
-                                           _image2,
-                                           width: 100,
-                                           height: 150,
-                                           fit: BoxFit.cover,
-                                         ),
-                                           Container(
-                                               margin: EdgeInsets.only(left: 2,top: 2),
-                                               decoration: BoxDecoration(
-                                                 shape: BoxShape.circle,
-                                                 gradient: LinearGradient(
-                                                     begin: Alignment.centerLeft,
-                                                     end: Alignment.centerRight,
-                                                     colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                               ),
-                                               child: GestureDetector(
-                                                   onTap: (){
-                                                     setState(() {
-                                                       _image2 = _image3;
-                                                       _image3 = _image4;
-                                                       _image4 = _image5;
-                                                       _image5 = _image6;
-                                                       _image6 = null;
-                                                     });
-                                                   },
-                                                   child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                               )
-                                           ),
-                                         ]),
-                                   ),
-                                 ),
-                               )
-                           ),
-                         ),
-                         AbsorbPointer(
-                           absorbing: _image2==null?true:false,
-                           child: _image2==null?
-                           Container(
-                             decoration: BoxDecoration(color: Colors.grey[200],
-                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                               boxShadow: [
-                                 BoxShadow(
-                                   color: Colors.grey,
-                                   offset: Offset(0.0, 1.0), //(x,y)
-                                   blurRadius: 6.0,
-                                 ),
-                               ],),
-                             width: 100,
-                             height: 150,
-                           )
-                               :GestureDetector(
-                             onTap: () {
-                               _image3 == null?_showPicker3(context):(){};
-                             },
-                             child: Container(
-                               decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 boxShadow: [
-                                   BoxShadow(
-                                     color: Colors.grey,
-                                     offset: Offset(0.0, 1.0), //(x,y)
-                                     blurRadius: 6.0,
-                                   ),
-                                 ],
-                               ),
-                               child: _image3 == null ?
-                               Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.grey[200],
-                                     borderRadius: BorderRadius.all(Radius.circular(20))
-                                 ),
-                                 width: 100,
-                                 height: 150,
-                                 child: Center(
-                                   child: Container(
-                                     padding: EdgeInsets.all(8),
-                                     decoration: BoxDecoration(
-                                       shape: BoxShape.circle,
-                                       gradient: LinearGradient(
-                                           begin: Alignment.centerLeft,
-                                           end: Alignment.centerRight,
-                                           colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                     ),
-                                     child: Icon(
-                                       Icons.add_photo_alternate_rounded,
-                                       color: Colors.white,
-                                     ),
-                                   ),
-                                 ),
-                               ):
-                               ClipRRect(
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 child: Container(
-                                   child: Stack(
-                                       children: [Image.file(
-                                         _image3,
-                                         width: 100,
-                                         height: 150,
-                                         fit: BoxFit.cover,
-                                       ),
-                                         Container(
-                                             margin: EdgeInsets.only(left: 2,top: 2),
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               gradient: LinearGradient(
-                                                   begin: Alignment.centerLeft,
-                                                   end: Alignment.centerRight,
-                                                   colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                             ),
-                                             child: GestureDetector(
-                                                 onTap: (){
-                                                   setState(() {
-                                                     _image3 = _image4;
-                                                     _image4 = _image5;
-                                                     _image5 = _image6;
-                                                     _image6 = null;
-                                                   });
-                                                 },
-                                                 child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                             )
-                                         ),
-                                       ]),
-                                 ),
-                               ),
-                             ),
-                           ),
-                         ),
-                       ]),
+                           ]),
 
-                       Container(height: 25),
-
-                       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-                         AbsorbPointer(
-                           absorbing: _image3==null?true:false,
-                           child: _image3==null?
+                           Container(height: 25),
                            Container(
-                             decoration: BoxDecoration(color: Colors.grey[200],
-                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                               boxShadow: [
-                                 BoxShadow(
+                             margin: EdgeInsets.symmetric(horizontal: 15),
+                             child: TextFormField(
+                               maxLines: 5,
+                               controller: _DescriptionController,
+                               keyboardType: TextInputType.multiline,
+                               decoration: InputDecoration(
+                                 hintText: 'Description',
+                                 hintStyle: TextStyle(
+                                     color: Colors.grey
+                                 ),
+                                 border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                 ),
+                               ),
+                             ),
+                           ),
+                           Container(height: 25),
+                           Container(
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(30),
+                                 gradient: LinearGradient(
+                                     begin: Alignment.centerLeft,
+                                     end: Alignment.centerRight,
+                                     colors: [Color(0xfffd297b), Color(0xffff655b)]),
+
+                                 boxShadow: [BoxShadow(
                                    color: Colors.grey,
                                    offset: Offset(0.0, 1.0), //(x,y)
                                    blurRadius: 6.0,
-                                 ),
-                               ],),
-                             width: 100,
-                             height: 150,
-                           )
-                               :GestureDetector(
-                               onTap: () {
-                                 _image4 == null?_showPicker4(context):(){};
-                               },
-                               child:Container(
-                                 decoration: BoxDecoration(
-                                   color: Colors.white,
-                                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                   boxShadow: [
-                                     BoxShadow(
-                                       color: Colors.grey,
-                                       offset: Offset(0.0, 1.0), //(x,y)
-                                       blurRadius: 6.0,
-                                     ),
-                                   ],
-                                 ),
-                                 child: _image4 == null ?
-                                 Container(
-                                   decoration: BoxDecoration(
-                                       color: Colors.grey[200],
-                                       borderRadius: BorderRadius.all(Radius.circular(20))
-                                   ),
-                                   width: 100,
-                                   height: 150,
-                                   child: Center(
-                                     child: Container(
-                                       padding: EdgeInsets.all(8),
-                                       decoration: BoxDecoration(
-                                         shape: BoxShape.circle,
-                                         gradient: LinearGradient(
-                                             begin: Alignment.centerLeft,
-                                             end: Alignment.centerRight,
-                                             colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                       ),
-                                       child: Icon(
-                                         Icons.add_photo_alternate_rounded,
-                                         color: Colors.white,
-                                       ),
-                                     ),
-                                   ),
-                                 ):
-                                 ClipRRect(
-                                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                                   child: Container(
-                                     child: Stack(
-                                         children: [Image.file(
-                                           _image4,
-                                           width: 100,
-                                           height: 150,
-                                           fit: BoxFit.cover,
-                                         ),
-                                           Container(
-                                               margin: EdgeInsets.only(left: 2,top: 2),
-                                               decoration: BoxDecoration(
-                                                 shape: BoxShape.circle,
-                                                 gradient: LinearGradient(
-                                                     begin: Alignment.centerLeft,
-                                                     end: Alignment.centerRight,
-                                                     colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                               ),
-                                               child: GestureDetector(
-                                                   onTap: (){
-                                                     setState(() {
-                                                       _image4 = _image5;
-                                                       _image5 = _image6;
-                                                       _image6 = null;
-                                                     });
-                                                   },
-                                                   child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                               )
-                                           ),
-                                         ]),
-                                   ),
-                                 ),
-                               )
-                           ),
-                         ),
-                         AbsorbPointer(
-                           absorbing: _image4==null?true:false,
-                           child: _image4==null?
-                           Container(
-                             decoration: BoxDecoration(color: Colors.grey[200],
-                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                               boxShadow: [
-                                 BoxShadow(
-                                   color: Colors.grey,
-                                   offset: Offset(0.0, 1.0), //(x,y)
-                                   blurRadius: 6.0,
-                                 ),
-                               ],),
-                             width: 100,
-                             height: 150,
-                           )
-                               :GestureDetector(
-                             onTap: () {
-                               _image5 == null?_showPicker5(context):(){};
-                             },
-                             child: Container(
-                               decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 boxShadow: [
-                                   BoxShadow(
-                                     color: Colors.grey,
-                                     offset: Offset(0.0, 1.0), //(x,y)
-                                     blurRadius: 6.0,
-                                   ),
-                                 ],
-                               ),
-                               child: _image5 == null ?
-                               Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.grey[200],
-                                     borderRadius: BorderRadius.all(Radius.circular(20))
-                                 ),
-                                 width: 100,
-                                 height: 150,
-                                 child: Center(
-                                   child: Container(
-                                     padding: EdgeInsets.all(8),
-                                     decoration: BoxDecoration(
-                                       shape: BoxShape.circle,
-                                       gradient: LinearGradient(
-                                           begin: Alignment.centerLeft,
-                                           end: Alignment.centerRight,
-                                           colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                     ),
-                                     child: Icon(
-                                       Icons.add_photo_alternate_rounded,
-                                       color: Colors.white,
-                                     ),
-                                   ),
-                                 ),
-                               ):
-                               ClipRRect(
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 child: Container(
-                                   child: Stack(
-                                       children: [Image.file(
-                                         _image5,
-                                         width: 100,
-                                         height: 150,
-                                         fit: BoxFit.cover,
-                                       ),
-                                         Container(
-                                             margin: EdgeInsets.only(left: 2,top: 2),
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               gradient: LinearGradient(
-                                                   begin: Alignment.centerLeft,
-                                                   end: Alignment.centerRight,
-                                                   colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                             ),
-                                             child: GestureDetector(
-                                                 onTap: (){
-                                                   setState(() {
-                                                     _image5 = _image6;
-                                                     _image6 = null;
-                                                   });
-                                                 },
-                                                 child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                             )
-                                         ),
-                                       ]),
-                                 ),
-                               ),
+                                 ),]
+                             ),
+                             width: 200,
+                             height: 50,
+                             child:TextButton(
+                               onPressed: _doSomething,
+                               child: Text('Continue',style: TextStyle(color: Colors.white),),
                              ),
                            ),
-                         ),
-                         AbsorbPointer(
-                           absorbing: _image5==null?true:false,
-                           child: _image5==null?
-                           Container(
-                             decoration: BoxDecoration(color: Colors.grey[200],
-                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                               boxShadow: [
-                                 BoxShadow(
-                                   color: Colors.grey,
-                                   offset: Offset(0.0, 1.0), //(x,y)
-                                   blurRadius: 6.0,
-                                 ),
-                               ],),
-                             width: 100,
-                             height: 150,
-                           )
-                               :GestureDetector(
-                             onTap: () {
-                               _image6 == null?_showPicker6(context):(){};
-                             },
-                             child: Container(
-                               decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 boxShadow: [
-                                   BoxShadow(
-                                     color: Colors.grey,
-                                     offset: Offset(0.0, 1.0), //(x,y)
-                                     blurRadius: 6.0,
-                                   ),
-                                 ],
-                               ),
-                               child: _image6 == null ?
-                               Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.grey[200],
-                                     borderRadius: BorderRadius.all(Radius.circular(20))
-                                 ),
-                                 width: 100,
-                                 height: 150,
-                                 child: Center(
-                                   child: Container(
-                                     padding: EdgeInsets.all(8),
-                                     decoration: BoxDecoration(
-                                       shape: BoxShape.circle,
-                                       gradient: LinearGradient(
-                                           begin: Alignment.centerLeft,
-                                           end: Alignment.centerRight,
-                                           colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                     ),
-                                     child: Icon(
-                                       Icons.add_photo_alternate_rounded,
-                                       color: Colors.white,
-                                     ),
-                                   ),
-                                 ),
-                               ):
-                               ClipRRect(
-                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                 child: Container(
-                                   child: Stack(
-                                       children: [Image.file(
-                                         _image6,
-                                         width: 100,
-                                         height: 150,
-                                         fit: BoxFit.cover,
-                                       ),
-                                         Container(
-                                             margin: EdgeInsets.only(left: 2,top: 2),
-                                             decoration: BoxDecoration(
-                                               shape: BoxShape.circle,
-                                               gradient: LinearGradient(
-                                                   begin: Alignment.centerLeft,
-                                                   end: Alignment.centerRight,
-                                                   colors: [Color(0xffFD297B), Color(0xffFF655B)]),
-                                             ),
-                                             child: GestureDetector(
-                                                 onTap: (){
-                                                   setState(() {
-                                                     _image6 = null;
-                                                   });
-                                                 },
-                                                 child: Container(padding: EdgeInsets.all(2),child: Icon(Icons.close_rounded,color: Colors.white,size: 23,))
-                                             )
-                                         ),
-                                       ]),
-                                 ),
-                               ),
-                             ),
-                           ),
-                         )
-                       ]),
-
-                       Container(height: 25),
-                       Container(
-                         margin: EdgeInsets.symmetric(horizontal: 15),
-                         child: TextFormField(
-                           maxLines: 5,
-                           controller: _DescriptionController,
-                           keyboardType: TextInputType.multiline,
-                           decoration: InputDecoration(
-                             hintText: 'Description',
-                             hintStyle: TextStyle(
-                                 color: Colors.grey
-                             ),
-                             border: OutlineInputBorder(
-                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                             ),
-                           ),
-                         ),
-                       ),
-                       Container(height: 25),
-                       Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(30),
-                             gradient: LinearGradient(
-                                 begin: Alignment.centerLeft,
-                                 end: Alignment.centerRight,
-                                 colors: [Color(0xfffd297b), Color(0xffff655b)]),
-
-                             boxShadow: [BoxShadow(
-                               color: Colors.grey,
-                               offset: Offset(0.0, 1.0), //(x,y)
-                               blurRadius: 6.0,
-                             ),]
-                         ),
-                         width: 200,
-                         height: 50,
-                         child:TextButton(
-                           onPressed: _doSomething,
-                           child: Text('Continue',style: TextStyle(color: Colors.white),),
-                         ),
-                       ),
-                     ])
-               ],
+                         ])
+                   ],
+                 ),
+               ),
              ),
-             Center(child: CircularProgressIndicator(color: Colors.blue))
-           ]),
-     ):
-       Column(
+             Center(child: CircularProgressIndicator(color: Colors.red))
+           ]):
+         Column(
          children: <Widget>[
            SizedBox(
              height: 32,
@@ -1570,14 +1584,16 @@ class _ImageScreenState extends State<ImageScreen> {
                    ),
                  ),
                  Container(height: 25),
-                 Container(
+
+                 GestureDetector(
+                   onTap: _doSomething,
+                     child:Container(
                    decoration: BoxDecoration(
                        borderRadius: BorderRadius.circular(30),
                        gradient: LinearGradient(
                            begin: Alignment.centerLeft,
                            end: Alignment.centerRight,
                            colors: [Color(0xfffd297b), Color(0xffff655b)]),
-
                        boxShadow: [BoxShadow(
                          color: Colors.grey,
                          offset: Offset(0.0, 1.0), //(x,y)
@@ -1586,17 +1602,12 @@ class _ImageScreenState extends State<ImageScreen> {
                    ),
                    width: 200,
                    height: 50,
-                   child:TextButton(
-                     onPressed: _doSomething,
-                     child: Text('Continue',style: TextStyle(color: Colors.white),),
-                   ),
+                     child: Center(child:Text('Continue',style: TextStyle(color: Colors.white),)),
+                 ),
                  ),
                ])
          ],
-       )
-
-
-     ,
+       ),
    );
   }
 

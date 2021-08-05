@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
   DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
-      FirebaseAuth.instance.currentUser.uid).collection("Information").doc("infor");
+      FirebaseAuth.instance.currentUser.uid);
 
 
   CollectionReference match = FirebaseFirestore.instance.collection("Match");
@@ -69,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemCount:  snapshot.data[uid].length,
                 itemBuilder: (context, index) {
                   List list = snapshot.data[uid];
-                  return ListTile(uid2: list.elementAt(index), width: width,);
+                  return ListTile(uid2: list.elementAt(index), width: width);
                 },
                 separatorBuilder: (context, index) {
                   return Divider(indent: width * 0.218,
@@ -210,7 +210,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       )
                   ),
                 ),
-
               ],
             ),
           ),
@@ -252,7 +251,7 @@ class _ListState extends State<ListTile> {
 
   getdata(String uid, Map<String,dynamic> data) async{
     DocumentReference docref = FirebaseFirestore.instance.collection("Users").doc(
-        uid2).collection("Information").doc("infor");
+        uid2);
     var docSnapshot = await docref.get();
     if (docSnapshot.exists) {
       setState(() {

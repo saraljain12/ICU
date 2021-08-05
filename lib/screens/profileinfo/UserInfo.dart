@@ -48,11 +48,14 @@ class _FormPageState extends State<FormPage> {
                   "number": phone,
                   "city":city,
                   "state":state,
-                  "Address":address
+                  "Address":address,
+                  "uid":FirebaseAuth.instance.currentUser.uid,
+                  "prefageend":99,
+                  "prefagestart":18,
+                  "prefcity":city
                 };
                 FirebaseFirestore.instance.collection("Users").doc(
-                    FirebaseAuth.instance.currentUser.uid).collection(
-                    "Information").doc("infor").set(demodata);
+                    FirebaseAuth.instance.currentUser.uid).set(demodata);
                 Navigator.pushReplacementNamed(context, '/ImageScreen');
               }
             }
@@ -79,8 +82,6 @@ class _FormPageState extends State<FormPage> {
               };
               FirebaseFirestore.instance.collection("Users").doc(
                   FirebaseAuth.instance.currentUser.uid)
-                  .collection("Information")
-                  .doc("infor")
                   .set(demodata);
               Navigator.pushReplacementNamed(context, '/ImageScreen');
             }
@@ -120,7 +121,8 @@ class _FormPageState extends State<FormPage> {
   }
 
 
-  String name,phone,age,gender;
+  String name,phone,gender;
+  int age;
   bool ismail;
   String mail;
 
@@ -263,10 +265,10 @@ class _FormPageState extends State<FormPage> {
                       },
                       onChanged: (String value){
                         _agekey.currentState.validate();
-                        age = value;
+                        age = int.parse(value);
                       },
                       onSaved: (String value) {
-                        age = value;
+                        age = int.parse(value);
                       },
                       style: TextStyle(
                           fontFamily: 'Poppins',

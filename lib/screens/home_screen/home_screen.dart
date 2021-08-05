@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex=3;
+  int _currentIndex=0;
 
   @override
   void initState() {
@@ -28,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
         .height;
     return  Scaffold(
       body: Center(
-        child:(_currentIndex==0)?HomeContent():(_currentIndex==1)?ChatScreen():(_currentIndex==2)?LikeScreen():(_currentIndex==3)?notification():SettingsContent(),
+        child:(_currentIndex==0)?HomeContent():
+        (_currentIndex==1)?ChatScreen():(_currentIndex==2)?LikeScreen():(_currentIndex==3)?notification():SettingsContent(),
       ),
       bottomNavigationBar: Container(
           decoration: BoxDecoration(

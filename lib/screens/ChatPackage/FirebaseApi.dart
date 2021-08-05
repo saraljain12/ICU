@@ -64,7 +64,7 @@ class _ChatState extends State<Chat> {
   String name;
 
     getimage() async{
-      DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(uid2).collection("Information").doc("infor");
+      DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(uid2);
       var docSnapshot = await docref.get();
      if (docSnapshot.exists) {
        setState(() {

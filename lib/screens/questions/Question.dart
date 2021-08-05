@@ -11,8 +11,9 @@ class Question extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         width: double.infinity,
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.1),
         child: RichText(
+          textAlign: TextAlign.center,
             text: new TextSpan(
                 children: [
                   new TextSpan(
@@ -25,26 +26,6 @@ class Question extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                       )
                   ),
-                  // new TextSpan(
-                  //     text: "Dates",
-                  //     style: TextStyle(
-                  //       fontFamily: 'GothamRounded',
-                  //       color: Color(0xffe20000),
-                  //       fontSize: 30,
-                  //       fontWeight: FontWeight.w500,
-                  //       fontStyle: FontStyle.normal,
-                  //     )
-                  // ),
-                  // new TextSpan(
-                  //     text: "?",
-                  //     style: TextStyle(
-                  //       fontFamily: 'GothamRounded',
-                  //       color: Color(0xff000000),
-                  //       fontSize: 30,
-                  //       fontWeight: FontWeight.w500,
-                  //       fontStyle: FontStyle.normal,
-                  //     )
-                  // ),
                 ]
             )
         )

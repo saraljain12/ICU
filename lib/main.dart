@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icu/screens/ChatPackage/FirebaseApi.dart';
 import 'package:icu/screens/Images/ImageUpload.dart';
-import 'package:icu/screens/Like/likescreen.dart';
-import 'package:icu/screens/Settings/FullSettings.dart';
+import 'package:icu/screens/Settings/Editprofile.dart';
 import 'package:icu/screens/home_screen/home_screen.dart';
+import 'package:icu/screens/login_screen/login_screen.dart';
 import 'package:icu/screens/splash_screen/splash_screen.dart';
 import 'screens/login_screen/otp_screen.dart';
 import 'package:icu/screens/profileinfo/UserInfo.dart';
@@ -35,9 +35,11 @@ class MyApp extends StatelessWidget {
         '/otpScreen': (BuildContext ctx) => OtpScreen(),
         '/homeScreen': (BuildContext ctx) => HomeScreen(),
         '/FormPage': (BuildContext ctx) => FormPage(),
+        '/LoginPage': (BuildContext ctx) => LoginScreen(),
         '/QuestionScreen':(BuildContext ctx)=> Questions(),
           '/ImageScreen':(BuildContext ctx)=>ImageScreen(),
-          '/ChatScreen':(BuildContext ctx)=>Chat()
+          '/ChatScreen':(BuildContext ctx)=>Chat(),
+          '/EditProfileScreen':(BuildContext ctx)=>EditSettings()
     });
   }
 }

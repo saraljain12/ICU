@@ -47,6 +47,8 @@ dependencies:
   flutter_gifimage: ^1.0.1
   flutter_svg: ^0.22.0
   carousel_slider: ^3.0.0
+  flutter_tindercard: ^0.1.8
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -69,8 +71,6 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/icons/
-    - assets/icons/premium.png
-    - assets/images/Google.png
     - assets/progress.gif
     - assets/progresscrop.gif
   # assets:
