@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:icu/screens/Settings/IntrestContainer.dart';
+import 'package:icu/screens/smallsettings/SmallSettings.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FullSettings extends StatefulWidget {
@@ -1545,6 +1546,7 @@ class _FullSettingsState extends State<FullSettings> {
                )
              ),
              SizedBox(height: 10),
+
              Container(
                margin: EdgeInsets.only(left: 20),
                child: Text("Show me",
@@ -1560,7 +1562,7 @@ class _FullSettingsState extends State<FullSettings> {
              ),
              SizedBox(height: 10),
              GestureDetector(
-                 // onTap:()=> Navigator.pushReplacementNamed(context, '/QuestionScreen'),
+                 // onTap:()=> Navigator.pushReplacement(context,MaterialPageRoute(builder:  (context) => smallsettings("Select Your Intrest"))),
                  child: Container(
                    height: 40,
                    margin: EdgeInsets.symmetric(horizontal: 25),

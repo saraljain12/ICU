@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:icu/screens/smallsettings/SmallSettings.dart';
 
 class EditSettings extends StatefulWidget {
   @override
@@ -383,11 +384,10 @@ class _EditSettingsState extends State<EditSettings> {
              ),
            ),
            GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
+             onTap:(){
+               Navigator.pushReplacement(context,MaterialPageRoute(
+                   builder:  (context) => smallsettings(appbartitle: "Education",heading:"Add Education",subheading: "Add Your Instituion",already: true,)));
+             },
                child: Container(
                  height: 40,
                  margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
