@@ -14,12 +14,14 @@ final List<List<String>> imgList = [
   ['assets/icons/premium.svg',"View Your Intro's","Unlock all your intro's","0xfff3f3f3"],
   ['assets/icons/premium.svg',"Get a Virtual date absolutely free!","All love stories begin with a date,get your's now","0xfff3f3f3"],
 ];
+
 class SettingsContent extends StatefulWidget {
   @override
   _SettingsContentState createState() => _SettingsContentState();
 
 }
-class _SettingsContentState extends State<SettingsContent> {
+
+class _SettingsContentState extends State<SettingsContent>{
 
   String uid = FirebaseAuth.instance.currentUser.uid;
   String url,name,city,state;
@@ -439,7 +441,8 @@ class _SettingsContentState extends State<SettingsContent> {
               toprow(context, width),
               SizedBox(height: 8),
               GestureDetector(
-                onTap:()=> Navigator.of(context).pushNamed('/EditProfileScreen'),
+                onTap:()=> WidgetsBinding.instance.addPostFrameCallback((_) { Navigator.of(context).pushNamed('/EditProfileScreen'); }),
+                    // Navigator.of(context).pushNamed('/EditProfileScreen'),
                   child: image(context, width, height)
               ),
               SizedBox(height: 8),

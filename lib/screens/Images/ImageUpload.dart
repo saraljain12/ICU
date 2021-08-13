@@ -189,12 +189,16 @@ class _ImageScreenState extends State<ImageScreen> {
            }
 
            if(_DescriptionController.text.toString()!="null"){
-             await docref.update({"Description":_DescriptionController.text});
+             await docref.update({"Description":_DescriptionController.text})
+                 .whenComplete(() =>Navigator.pushReplacementNamed(context, '/QuestionScreen'));
+           }else{
+              await docref.update({"Description":""})
+                  .whenComplete(() =>Navigator.pushReplacementNamed(context, '/QuestionScreen'));
            }
            setState(() {
              progress = false;
            });
-           Navigator.pushReplacementNamed(context, '/QuestionScreen');
+
    }
    else{
      setState(() {
@@ -995,7 +999,7 @@ class _ImageScreenState extends State<ImageScreen> {
                              width: 200,
                              height: 50,
                              child:TextButton(
-                               onPressed: _doSomething,
+                               onPressed:(){ _doSomething; },
                                child: Text('Continue',style: TextStyle(color: Colors.white),),
                              ),
                            ),

@@ -31,7 +31,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
       child: SizedBox(
         height: 75,
         child: ListView(
-          itemExtent: screenwidth/6,
+          itemExtent: (screenwidth/6)-1,
 
           padding: EdgeInsets.only(left: 3,right: 2),
           scrollDirection: Axis.horizontal,
@@ -39,14 +39,14 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
             Column(
               children: [
                 Container(
-                   margin: EdgeInsets.symmetric(horizontal: 5),
-                  width: 44,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    width: 44,
                     child: Column(
                         children: [
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            //backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (toppickurl!=null)?CachedNetworkImageProvider(toppickurl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -67,7 +67,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            // backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (popularurl!=null)?CachedNetworkImageProvider(popularurl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -88,7 +88,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            // backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (matchurl!=null)?CachedNetworkImageProvider(matchurl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -102,14 +102,14 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
             Column(
               children: [
                 Container(
-                     margin: EdgeInsets.symmetric(horizontal: 5),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     width: 44,
                     child: Column(
                         children: [
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            // backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (passporturl!=null)?CachedNetworkImageProvider(passporturl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -130,7 +130,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            // backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (nearbyurl!=null)?CachedNetworkImageProvider(nearbyurl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -151,7 +151,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
                           SizedBox(height: 10),
                           CircleAvatar(
                             radius: 22.0,
-                            // backgroundImage: (url!=null)?NetworkImage(url):null,
+                            backgroundImage: (onlineurl!=null)?NetworkImage(onlineurl):null,
                             backgroundColor: Colors.transparent,
                           ),SizedBox(height: 2),
 
@@ -173,18 +173,21 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
   @override
   void didChangeDependencies() {
     mypref();
+    getimag();
     // random();
     super.didChangeDependencies();
   }
   @override
   void initState() {
     // random();
+    getimag();
     getdata();
     mypref();
   }
 
   String prefgender,prefcity;
   int prefagestart,prefageend;
+  String toppickurl,popularurl,passporturl,onlineurl,nearbyurl,matchurl;
 
   mypref() async {
     DocumentReference docref =  FirebaseFirestore.instance.collection("Users").doc(
@@ -198,6 +201,21 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
           prefageend = (data['prefageend']);
           prefcity = (data['prefcity']);
         });
+    }
+  }
+  getimag() async {
+    DocumentReference docref2 =  FirebaseFirestore.instance.collection("Images").doc("ypFdWdxgaa97wtTb5miM");
+    var docSnapshot2 = await docref2.get();
+    if (docSnapshot2.exists) {
+      setState(() {
+        Map<String, dynamic> data = docSnapshot2.data();
+        toppickurl = data['toppickurl'];
+        popularurl = data['popularurl'];
+        passporturl = data['Passporturl'];
+        onlineurl = (data['Onlineurl']);
+        nearbyurl = (data['Nearbyurl']);
+        matchurl = (data['Match%url']);
+      });
     }
   }
   // int randomnum;
@@ -225,7 +243,6 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
       });
     });
     Fluttertoast.showToast(msg: list.toString());
-    
   }
 
   Stream<QuerySnapshot> stream(){
@@ -528,7 +545,7 @@ class _HomeContentState extends State<HomeContent>with TickerProviderStateMixin 
             }
         ),
         
-        Stories(context,screenWidth),
+       Stories(context,screenWidth)
       ],
     );
   }

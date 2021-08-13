@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-Container buildContainer(Image image,String hinttext,bool selected) {
+Container buildContainer(SvgPicture image,String hinttext,bool selected) {
 
   return selected?Container(
     height: 28,
@@ -23,7 +24,8 @@ Container buildContainer(Image image,String hinttext,bool selected) {
         Container(
           width: 23,
           height: 23,
-          child: image,color: Colors.white,
+          child: image,
+          color: Colors.white,
         ),
         SizedBox(width: 5),
         Text(hinttext,

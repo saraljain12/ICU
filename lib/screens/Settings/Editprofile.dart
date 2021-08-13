@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:icu/screens/smallsettings/SmallSettings.dart';
+import 'package:icu/screens/smallsettings/genderscreen.dart';
 
 class EditSettings extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class EditSettings extends StatefulWidget {
 
 class _EditSettingsState extends State<EditSettings> {
   String uid = FirebaseAuth.instance.currentUser.uid;
-  String url,name,city,state;
+  String url,name,city,state,gender,description,height,university,job;
   int age;
   int _current = 0;
   bool verified = false;
@@ -33,7 +35,13 @@ class _EditSettingsState extends State<EditSettings> {
         city = data['city'];
         state = data['state'];
         age = data['age'];
+        gender = data['gender'];
+        description = data['Description'];
+        height = data['height'];
+        university = data['university'];
+        job = data['job'];
       });
+      Fluttertoast.showToast(msg: "aaaaaaa");
     }
   }
 
@@ -43,11 +51,13 @@ class _EditSettingsState extends State<EditSettings> {
   }
 
 
+
   @override
   void didChangeDependencies() {
     getimage();
     super.didChangeDependencies();
   }
+
 
   Widget toprow(BuildContext context,double width){
     return Center(
@@ -123,7 +133,7 @@ class _EditSettingsState extends State<EditSettings> {
            )
        ),
      ),
-     body: SingleChildScrollView(
+     body: (name!=null)?SingleChildScrollView(
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.start,
          children: [
@@ -218,7 +228,7 @@ class _EditSettingsState extends State<EditSettings> {
 
            Container(
              margin: EdgeInsets.only(left: 20,top: 10),
-             child: Text("About",
+             child: Text("About $name",
                  style: TextStyle(
                    fontFamily: 'Rubik',
                    color: Color(0xff333343),
@@ -230,11 +240,12 @@ class _EditSettingsState extends State<EditSettings> {
              ),
            ),
            GestureDetector(
-               // onTap:(){
-               //   setState(() {
-               //     verified= true;
-               //   });
-               // },
+               onTap:(){
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => smallsettings(appbartitle: "Description",heading:"Add Description",
+                       subheading: (description==null||description.isEmpty)?"Add Your Description":"$description",
+                       already: (description==null||description.isEmpty)?false:true,fieldname: "Description",numboard: false,)));
+               },
                child: Container(
                  height: 40,
                  width: double.infinity,
@@ -247,8 +258,17 @@ class _EditSettingsState extends State<EditSettings> {
                      border: Border.all(color: Color(0xffc7c7c8))
                  ),
                  child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text("Description",
+                     description.isEmpty?Text("Add Description",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Colors.grey,
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ): Text("$description",
                          style: TextStyle(
                            fontFamily: 'Rubik',
                            color: Color(0xff333343),
@@ -257,6 +277,53 @@ class _EditSettingsState extends State<EditSettings> {
                            fontStyle: FontStyle.normal,
                          )
                      ),
+                     Icon(Icons.arrow_forward_ios_rounded)
+                   ],
+                 ),
+               )
+           ),
+
+           Container(
+             margin: EdgeInsets.only(left: 20,top: 10),
+             child: Text("Gender Identity",
+                 style: TextStyle(
+                   fontFamily: 'Rubik',
+                   color: Color(0xff333343),
+                   fontSize: 16,
+                   fontWeight: FontWeight.w600,
+                   fontStyle: FontStyle.normal,
+                   letterSpacing: 0.16,
+                 )
+             ),
+           ),
+           GestureDetector(
+               onTap:(){
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => genderscreen(appbartitle: "Gender",heading:"Select Your Gender",
+                         fieldname: "gender",selected: "$gender",showme: false,)));
+               },
+               child: Container(
+                 height: 40,
+                 margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+                 padding: EdgeInsets.symmetric(horizontal: 12),
+                 decoration: new BoxDecoration(
+                     color: Color(0xffffffff),
+                     borderRadius: BorderRadius.circular(30),
+                     border: Border.all(color: Color(0xffc7c7c8))
+                 ),
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Text("$gender",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Color(0xff333343),
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ),
+                     Icon(Icons.arrow_forward_ios_rounded)
                    ],
                  ),
                )
@@ -276,11 +343,12 @@ class _EditSettingsState extends State<EditSettings> {
              ),
            ),
            GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
+               onTap:(){
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => smallsettings(appbartitle: "Age",heading:"Add your age",
+                       subheading: (age==null||(String.fromCharCode(age).isEmpty))?"Enter Your Age(Years)":"$age",
+                       already: (age==null||String.fromCharCode(age).isEmpty)?false:true,fieldname: "age",numboard: true,)));
+               },
                child: Container(
                  height: 40,
                  margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
@@ -323,11 +391,12 @@ class _EditSettingsState extends State<EditSettings> {
              ),
            ),
            GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
+               onTap:(){
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => smallsettings(appbartitle: "Height",heading:"Add Height",
+                       subheading: (height==null||height.isEmpty)?"Enter Your Height(cm)":"$height",
+                       already: (height==null||height.isEmpty)?false:true,fieldname: "height",numboard: true,)));
+               },
                child: Container(
                  height: 40,
                  margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
@@ -341,7 +410,15 @@ class _EditSettingsState extends State<EditSettings> {
                  child: Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text("158 cm",
+                     (height==null||height.isEmpty)?Text("Add height",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Colors.grey,
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ): Text("$height cm",
                          style: TextStyle(
                            fontFamily: 'Rubik',
                            color: Color(0xff333343),
@@ -351,7 +428,7 @@ class _EditSettingsState extends State<EditSettings> {
                          )
                      ),
                      Icon(Icons.arrow_forward_ios_rounded)
-                   ],
+                    ],
                  ),
                )
            ),
@@ -372,7 +449,7 @@ class _EditSettingsState extends State<EditSettings> {
 
            Container(
              margin: EdgeInsets.only(left: 20,top: 10),
-             child: Text("Education level",
+             child: Text("Add University",
                  style: TextStyle(
                    fontFamily: 'Rubik',
                    color: Color(0xff333343),
@@ -385,14 +462,13 @@ class _EditSettingsState extends State<EditSettings> {
            ),
            GestureDetector(
              onTap:(){
-               Navigator.pushReplacement(context,MaterialPageRoute(
-                   builder:  (context) => smallsettings(appbartitle: "Education",heading:"Add Education",subheading: "Add Your Instituion",already: true,)));
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => smallsettings(appbartitle: "Education",heading:"Add Education",subheading: (university==null||university.isEmpty)?"Add Your Instituion":"$university",already: (university==null||university.isEmpty)?false:true,fieldname: "university",numboard: false,)));
              },
                child: Container(
                  height: 40,
                  margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
                  padding: EdgeInsets.symmetric(horizontal: 12),
-
                  decoration: new BoxDecoration(
                      color: Color(0xffffffff),
                      borderRadius: BorderRadius.circular(30),
@@ -401,7 +477,15 @@ class _EditSettingsState extends State<EditSettings> {
                  child: Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text("I am an Undergrad",
+                     (university==null||university.isEmpty)?Text("Add University",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Colors.grey,
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ): Text("$university",
                          style: TextStyle(
                            fontFamily: 'Rubik',
                            color: Color(0xff333343),
@@ -430,11 +514,12 @@ class _EditSettingsState extends State<EditSettings> {
              ),
            ),
            GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
+               onTap:(){
+                 Navigator.push(context,MaterialPageRoute(
+                     builder:  (context) => smallsettings(appbartitle: "Occupation",heading:"Add Occupation",
+                       subheading: (job==null||job.isEmpty)?"Enter Your Occupation":"$job",
+                       already: (job==null||job.isEmpty)?false:true,fieldname: "job",numboard: false,)));
+               },
                child: Container(
                  height: 40,
                  margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
@@ -448,7 +533,15 @@ class _EditSettingsState extends State<EditSettings> {
                  child: Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text("Add Job",
+                     (job==null||job.isEmpty)?Text("Add Your Occupation",
+                         style: TextStyle(
+                           fontFamily: 'Rubik',
+                           color: Colors.grey,
+                           fontSize: 14,
+                           fontWeight: FontWeight.w400,
+                           fontStyle: FontStyle.normal,
+                         )
+                     ): Text("$job",
                          style: TextStyle(
                            fontFamily: 'Rubik',
                            color: Color(0xff333343),
@@ -463,126 +556,65 @@ class _EditSettingsState extends State<EditSettings> {
                )
            ),
 
-           Container(
-             margin: EdgeInsets.only(left: 20,top: 10,bottom: 10),
-             child: Text("Basic Details",
-                 style: TextStyle(
-                   fontFamily: 'Rubik',
-                   color: Color(0xff333343),
-                   fontSize: 18,
-                   fontWeight: FontWeight.w600,
-                   fontStyle: FontStyle.normal,
-                   letterSpacing: 0.16,
-                 )
-             ),
-           ),
-
-           Container(
-             margin: EdgeInsets.only(left: 20,top: 10),
-             child: Text("Gender Identity",
-                 style: TextStyle(
-                   fontFamily: 'Rubik',
-                   color: Color(0xff333343),
-                   fontSize: 16,
-                   fontWeight: FontWeight.w600,
-                   fontStyle: FontStyle.normal,
-                   letterSpacing: 0.16,
-                 )
-             ),
-           ),
-           GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
-               child: Container(
-                 height: 40,
-                 margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-                 padding: EdgeInsets.symmetric(horizontal: 12),
-
-                 decoration: new BoxDecoration(
-                     color: Color(0xffffffff),
-                     borderRadius: BorderRadius.circular(30),
-                     border: Border.all(color: Color(0xffc7c7c8))
-                 ),
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Text("Male",
-                         style: TextStyle(
-                           fontFamily: 'Rubik',
-                           color: Color(0xff333343),
-                           fontSize: 14,
-                           fontWeight: FontWeight.w400,
-                           fontStyle: FontStyle.normal,
-                         )
-                     ),
-                     Icon(Icons.arrow_forward_ios_rounded)
-                   ],
-                 ),
-               )
-           ),
-
-           Container(
-             margin: EdgeInsets.only(left: 20,top: 10),
-             child: Text("My Location",
-                 style: TextStyle(
-                   fontFamily: 'Rubik',
-                   color: Color(0xff333343),
-                   fontSize: 16,
-                   fontWeight: FontWeight.w600,
-                   fontStyle: FontStyle.normal,
-                   letterSpacing: 0.16,
-                 )
-             ),
-           ),
-           GestureDetector(
-             // onTap:(){
-             //   setState(() {
-             //     verified= true;
-             //   });
-             // },
-               child: Container(
-                 height: 40,
-                 margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-                 padding: EdgeInsets.symmetric(horizontal: 12),
-
-                 decoration: new BoxDecoration(
-                     color: Color(0xffffffff),
-                     borderRadius: BorderRadius.circular(30),
-                     border: Border.all(color: Color(0xffc7c7c8))
-                 ),
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Text("Current Location",
-                         style: TextStyle(
-                           fontFamily: 'Rubik',
-                           color: Color(0xff333343),
-                           fontSize: 14,
-                           fontWeight: FontWeight.w400,
-                           fontStyle: FontStyle.normal,
-                         )
-                     ),
-                     Text ("$city,$state",
-                         style: TextStyle(
-                           fontFamily: 'Rubik',
-                           color: Color(0xff333343),
-                           fontSize: 14,
-                           fontWeight: FontWeight.w400,
-                           fontStyle: FontStyle.normal,
-                         )
-                     ),
-
-                   ],
-                 ),
-               )
-           ),
+           // Container(
+           //   margin: EdgeInsets.only(left: 20,top: 10),
+           //   child: Text("My Location",
+           //       style: TextStyle(
+           //         fontFamily: 'Rubik',
+           //         color: Color(0xff333343),
+           //         fontSize: 16,
+           //         fontWeight: FontWeight.w600,
+           //         fontStyle: FontStyle.normal,
+           //         letterSpacing: 0.16,
+           //       )
+           //   ),
+           // ),
+           // GestureDetector(
+           //   // onTap:(){
+           //   //   setState(() {
+           //   //     verified= true;
+           //   //   });
+           //   // },
+           //     child: Container(
+           //       height: 40,
+           //       margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+           //       padding: EdgeInsets.symmetric(horizontal: 12),
+           //
+           //       decoration: new BoxDecoration(
+           //           color: Color(0xffffffff),
+           //           borderRadius: BorderRadius.circular(30),
+           //           border: Border.all(color: Color(0xffc7c7c8))
+           //       ),
+           //       child: Row(
+           //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           //         children: [
+           //           Text("Current Location",
+           //               style: TextStyle(
+           //                 fontFamily: 'Rubik',
+           //                 color: Color(0xff333343),
+           //                 fontSize: 14,
+           //                 fontWeight: FontWeight.w400,
+           //                 fontStyle: FontStyle.normal,
+           //               )
+           //           ),
+           //           Text ("$city,$state",
+           //               style: TextStyle(
+           //                 fontFamily: 'Rubik',
+           //                 color: Color(0xff333343),
+           //                 fontSize: 14,
+           //                 fontWeight: FontWeight.w400,
+           //                 fontStyle: FontStyle.normal,
+           //               )
+           //           ),
+           //
+           //         ],
+           //       ),
+           //     )
+           // ),
 
          ],
        ),
-     ),
+     ):Container(),
    );
   }
 }

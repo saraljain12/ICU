@@ -7,7 +7,6 @@ import 'package:icu/screens/home_screen/home_screen.dart';
 
 import './quiz.dart';
 
-
 class Questions extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +33,7 @@ class _MyQuestionsState extends State<Questions> {
         {'text': 'Web Development Kit', 'score': -2},
         {
           'text':
-          'SDK to build beautiful IOS, Android, Web & Desktop Native Apps',
+              'SDK to build beautiful IOS, Android, Web & Desktop Native Apps',
           'score': 10
         },
       ],
@@ -58,8 +57,7 @@ class _MyQuestionsState extends State<Questions> {
       ],
     },
     {
-      'questionText':
-      'prefgender',
+      'questionText': 'prefgender',
       'answers': [
         {
           'text': 'Male',
@@ -71,16 +69,18 @@ class _MyQuestionsState extends State<Questions> {
   ];
 
   var _questionIndex = 0;
-  Map<String,dynamic> demodata= {};
+  Map<String, dynamic> demodata = {};
 
   void _answerQuestion(String text) {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-   String uid = FirebaseAuth.instance.currentUser.uid;
-   demodata.addAll({_questions[_questionIndex-1].values.elementAt(0):text.toString()});
-   DocumentReference docReference = FirebaseFirestore.instance.collection('Users').doc(uid);
-   docReference.update(demodata);
+    String uid = FirebaseAuth.instance.currentUser.uid;
+    demodata.addAll(
+        {_questions[_questionIndex - 1].values.elementAt(0): text.toString()});
+    DocumentReference docReference =
+        FirebaseFirestore.instance.collection('Users').doc(uid);
+    docReference.update(demodata);
 
     if (_questionIndex < _questions.length) {
       print('We have more questions!');
@@ -88,21 +88,22 @@ class _MyQuestionsState extends State<Questions> {
       print('No more questions!');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body:  Padding(
+        body: Padding(
             padding: const EdgeInsets.all(30.0),
             child: _questionIndex < _questions.length
                 ? Quiz(
-              answerQuestion: _answerQuestion,
-              questionIndex: _questionIndex,
-              questions: _questions,
-            ) //Quiz
-                : HomeScreen()
-          ),
-        ), //Padding //Scaffold
+                    answerQuestion: _answerQuestion,
+                    questionIndex: _questionIndex,
+                    questions: _questions,
+                  ) //Quiz
+                : Navigator.pushNamedAndRemoveUntil(
+                    context, '/homeScreen', ModalRoute.withName('/'))),
+      ), //Padding //Scaffold
       debugShowCheckedModeBanner: false,
     ); //MaterialApp
   }

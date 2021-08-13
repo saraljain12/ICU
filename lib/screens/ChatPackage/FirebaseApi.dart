@@ -1,13 +1,14 @@
 //@dart=2.9
 import 'dart:async';
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:icu/screens/ChatPackage/virtualdate.dart';
 import 'package:icu/services.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 String url;
 class Chat extends StatefulWidget {
@@ -27,6 +28,7 @@ class _ChatState extends State<Chat> {
   static FirebaseAuth _auth = FirebaseAuth.instance;
   final String uid = _auth.currentUser.uid;
   final controller = ScrollController();
+  ClientRole _role = ClientRole.Broadcaster;
   // late bool isShowSticker;
 
   sendMessage() {
@@ -75,6 +77,28 @@ class _ChatState extends State<Chat> {
      }
    }
 
+   Future<void> onJoin() async {
+     // update input validation
+     // await for camera and mic permissions before pushing video page
+     await _handleCameraAndMic(Permission.camera);
+     await _handleCameraAndMic(Permission.microphone);
+     // push video page with given channel name
+     await Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) => CallPage(
+           channelName: 'firstchannel',
+           role: _role,
+         ),
+       ),
+     );
+   }
+
+   Future<void> _handleCameraAndMic(Permission permission) async {
+     final status = await permission.request();
+     print(status);
+   }
+
   @override
   void initState() {
       getimage();
@@ -116,6 +140,19 @@ class _ChatState extends State<Chat> {
        appBar: AppBar(
             leading: GestureDetector(onTap: (){Navigator.pop(context);},child: Icon(Icons.arrow_back_ios,color: Colors.black,)),
            shadowColor: ( Color(0x29000000)),
+         actions: <Widget>[
+           InkWell(
+               onTap:() {
+                onJoin();
+               },
+               child: Padding(
+                 padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+                 child: Icon(
+                   Icons.video_call,
+                   color: Colors.black,
+                 ),
+               ))
+         ],
          backgroundColor: Colors.white,
          title:  Row(
            children: [
